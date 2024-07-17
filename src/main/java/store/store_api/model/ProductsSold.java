@@ -6,28 +6,24 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
-@Table(name = "sales")
-@Entity(name = "Sales")
+@Table(name = "product_sold")
+@Entity(name = "ProductSold")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Sales {
+public class ProductsSold {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Stores stores;
+    private Foods foods;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Users users;
+    private Drinks drinks;
 
-    private LocalDateTime saleDate;
-    private Integer quantitySold;
-    private Integer totalPrice;
-    private String paymentMethood;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Sales sales;
 }

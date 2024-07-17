@@ -6,23 +6,20 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Table(name = "stores")
-@Entity(name = "Stores")
+@Table(name = "foods")
+@Entity(name = "Foods")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Stores {
+public class Foods {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String storeName;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    private Addres addres;
-
-    @OneToMany
-    private Sales sales;
+    private String foodName;
+    private Integer quantity;
+    private Integer price;
+    private String description;
 }

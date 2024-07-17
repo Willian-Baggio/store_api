@@ -27,6 +27,12 @@ public class Addres {
     private String city;
     private String uf;
 
+    @OneToMany(fetch = FetchType.LAZY)
+    private Users users;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private Stores store;
+
     public Addres(AddresDataDTO data) {
         this.street = data.street();
         this.neighborhood = data.neighborhood();

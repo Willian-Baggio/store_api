@@ -32,10 +32,15 @@ public class Users implements UserDetails {
     private String cellphone;
     private String cpf;
     private LocalDateTime registrationDate;
+
+    @Enumerated(EnumType.STRING)
     private Roles roles;
 
-//    OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Addres addres;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private Sales sales;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
