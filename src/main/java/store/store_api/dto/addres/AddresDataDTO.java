@@ -14,7 +14,7 @@ public record AddresDataDTO(
 
     @NotBlank
     @Pattern(regexp = "\\d{8}")
-    String zip_code,
+    String zipCode,
 
     @NotBlank
     String number,
@@ -28,11 +28,11 @@ public record AddresDataDTO(
     String uf
 ) {
     public AddresDataDTO(Addres addres) {
-        this(addres.getStreet(), addres.getNeighborhood(), addres.getZip_code(), addres.getNumber(),
+        this(addres.getStreet(), addres.getNeighborhood(), addres.getZipCode(), addres.getNumber(),
                 addres.getComplement(), addres.getCity(), addres.getUf());
     }
 
     public String getZipCode() {
-        return zip_code;
+        return zipCode;
     }
 }

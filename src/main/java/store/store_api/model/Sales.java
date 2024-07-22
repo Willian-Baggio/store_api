@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import store.store_api.dto.sales.AlterSalesDTO;
+import store.store_api.dto.sales.SalesDTO;
 
 import java.time.LocalDateTime;
 
@@ -30,4 +32,18 @@ public class Sales {
     private Integer quantitySold;
     private Integer totalPrice;
     private String paymentMethood;
+
+    public Sales(SalesDTO salesDTO) {
+        this.stores = salesDTO.stores();
+        this.saleDate = salesDTO.saleDate();
+        this.quantitySold = salesDTO.quantitySold();
+        this.totalPrice = salesDTO.totalPrice();
+        this.paymentMethood = salesDTO.paymentMethood();
+    }
+
+    public Sales(Sales sales) {
+    }
+
+    public Sales(AlterSalesDTO alterSalesDTO) {
+    }
 }

@@ -5,6 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import store.store_api.dto.stores.AlterStoreDTO;
+import store.store_api.dto.stores.StoreCreateDTO;
+
+import java.util.List;
 
 @Table(name = "stores")
 @Entity(name = "Stores")
@@ -24,5 +28,14 @@ public class Stores {
     private Addres addres;
 
     @OneToMany
-    private Sales sales;
+    private List<Sales> sales;
+
+    public Stores(StoreCreateDTO storeCreateDTO) {
+    }
+
+    public Stores(Stores stores) {
+    }
+
+    public Stores(AlterStoreDTO alterStoreDTO) {
+    }
 }

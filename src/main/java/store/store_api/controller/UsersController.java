@@ -5,6 +5,7 @@ import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 import store.store_api.dto.users.AlterUserDTO;
 import store.store_api.dto.users.UserCreateDTO;
 import store.store_api.service.UsersService;
@@ -17,9 +18,12 @@ public class UsersController {
     private UsersService usersService;
 
     @PostMapping
-    public ResponseEntity userRegister(@RequestBody @Valid UserCreateDTO userCreateDTO) {
+    public ResponseEntity userRegister(@RequestBody @Valid UserCreateDTO userCreateDTO, UriComponentsBuilder uriBuilder) {
         try {
-            return ResponseEntity.ok("User create");
+            var dto = usersService.createUser(userCreateDTO);
+            var uri = uriBuilder.path("/users/{id}").buildAndExpand(dto.getId()).toUri();
+
+            return ResponseEntity.created(uri).body(dto);
         } catch (ValidationException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -28,8 +32,8 @@ public class UsersController {
     @PutMapping
     public ResponseEntity alterUser(@RequestBody @Valid AlterUserDTO alterUserDTO) {
         try {
-            usersService.alterUser(alterUserDTO);
-            return ResponseEntity.ok("Alter user");
+            var dto = usersService.alterUser(alterUserDTO);
+            return ResponseEntity.ok(dto);
         } catch (ValidationException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

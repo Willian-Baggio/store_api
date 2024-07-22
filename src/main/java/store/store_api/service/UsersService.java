@@ -4,6 +4,7 @@ import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import store.store_api.dto.users.AlterUserDTO;
+import store.store_api.dto.users.UserCreateDTO;
 import store.store_api.model.Users;
 import store.store_api.repository.UsersRepository;
 
@@ -13,12 +14,19 @@ public class UsersService {
     @Autowired
     private UsersRepository usersRepository;
 
-    public void alterUser(AlterUserDTO alterUserDTO) {
+    public Users createUser(UserCreateDTO userCreateDTO) {
+        var users = new Users(userCreateDTO);
+        usersRepository.save(users);
+        return new Users(users);
+    }
+
+    public AlterUserDTO alterUser(AlterUserDTO alterUserDTO) {
         if (!usersRepository.existsById(alterUserDTO.id())) {
             throw new ValidationException("User with ID " + alterUserDTO.id() + " does not exist.");
         }
-        Users users = new Users();
+        var users = new Users();
         usersRepository.save(users);
+        return new AlterUserDTO(users);
     }
 
     public void deleteUser(Long id) {
@@ -27,4 +35,5 @@ public class UsersService {
         }
         usersRepository.deleteById(id);
     }
+
 }

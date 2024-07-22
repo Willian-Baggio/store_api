@@ -4,5 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import store.store_api.model.Addres;
 
 public interface AddresRepository extends JpaRepository<Addres, Long> {
-    boolean existsByZipCode(String zip_code);
+    boolean existsByZipCode(String zipCode);
 }

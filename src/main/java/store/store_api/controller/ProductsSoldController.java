@@ -6,23 +6,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-import store.store_api.dto.foods.AlterFoodsDTO;
-import store.store_api.dto.foods.FoodsDTO;
-import store.store_api.model.Foods;
-import store.store_api.service.FoodService;
+import store.store_api.dto.productsSold.AlterProductSoldDTO;
+import store.store_api.dto.productsSold.ProductSoldDTO;
+import store.store_api.service.ProductsSoldService;
 
 @RestController
-@RequestMapping("foods")
-public class FoodsController {
+@RequestMapping("products-sold")
+public class ProductsSoldController {
 
     @Autowired
-    private FoodService foodService;
+    private ProductsSoldService productsSoldService;
 
     @PostMapping
-    public ResponseEntity foodsRegister(@RequestBody @Valid FoodsDTO foodsDTO, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<?> productSoldCreate(@RequestBody @Valid ProductSoldDTO productSoldDTO, UriComponentsBuilder uriBuilder) {
         try {
-            var dto = foodService.createFood(foodsDTO);
-            var uri = uriBuilder.path("/foods/{id}").buildAndExpand(dto.getId()).toUri();
+            var dto = productsSoldService.createProductSold(productSoldDTO);
+            var uri = uriBuilder.path("/products-sold/{id}").buildAndExpand(dto.getId()).toUri();
 
             return ResponseEntity.created(uri).body(dto);
         } catch (ValidationException e) {
@@ -31,9 +30,9 @@ public class FoodsController {
     }
 
     @PutMapping
-    public ResponseEntity alterFood(@RequestBody @Valid AlterFoodsDTO alterFoodsDTO) {
+    public ResponseEntity alterProducSold(@RequestBody @Valid AlterProductSoldDTO alterProductSoldDTO) {
         try {
-            var dto = foodService.alterFood(alterFoodsDTO);
+            var dto = productsSoldService.alterProductSold(alterProductSoldDTO);
             return ResponseEntity.ok(dto);
         } catch (ValidationException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -41,9 +40,9 @@ public class FoodsController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteFood(@PathVariable Long id) {
+    public ResponseEntity deleteProductSold(@PathVariable Long id) {
         try {
-            foodService.deleteFood(id);
+            productsSoldService.deleteProductSold(id);
             return ResponseEntity.noContent().build();
         } catch (ValidationException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

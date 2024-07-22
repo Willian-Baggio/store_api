@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import store.store_api.dto.productsSold.ProductSoldDTO;
 
 @Table(name = "product_sold")
 @Entity(name = "ProductSold")
@@ -26,4 +27,7 @@ public class ProductsSold {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Sales sales;
+
+    public ProductsSold(ProductSoldDTO productSoldDTO) {
+    }
 }

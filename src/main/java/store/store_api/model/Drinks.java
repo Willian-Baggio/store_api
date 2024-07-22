@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import store.store_api.dto.drinks.AlterDrinksDTO;
+import store.store_api.dto.drinks.DrinksDTO;
 
 @Table(name = "drinks")
 @Entity(name = "Drinks")
@@ -23,32 +25,15 @@ public class Drinks {
     private Integer price;
     private String description;
 
-    public Drinks(String drinkName, Integer quantity, Integer price, String description) {
-        this.drinkName = drinkName;
-        this.quantity = quantity;
-        this.price = price;
-        this.description = description;
+    public Drinks(DrinksDTO drinksDTO) {
+        this.drinkName = drinksDTO.drinkName();
+        this.quantity = drinksDTO.quantity();
+        this.price = drinksDTO.price();
+        this.description = drinksDTO.descripton();
     }
 
-    public Drinks(){}
+    public Drinks(Drinks drinks){}
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getDrinkName() {
-        return drinkName;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public Integer getPrice() {
-        return price;
-    }
-
-    public String getDescription() {
-        return description;
+    public Drinks(AlterDrinksDTO alterDrinksDTO) {
     }
 }

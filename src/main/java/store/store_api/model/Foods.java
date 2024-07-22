@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import store.store_api.dto.foods.AlterFoodsDTO;
+import store.store_api.dto.foods.FoodsDTO;
 
 @Table(name = "foods")
 @Entity(name = "Foods")
@@ -22,4 +24,17 @@ public class Foods {
     private Integer quantity;
     private Integer price;
     private String description;
+
+    public Foods(FoodsDTO foodsDTO) {
+        this.foodName = foodsDTO.foodName();
+        this.quantity = foodsDTO.quantity();
+        this.price = foodsDTO.price();
+        this.description = foodsDTO.descripton();
+    }
+
+    public Foods(Foods foods) {
+    }
+
+    public Foods(AlterFoodsDTO alterFoodsDTO) {
+    }
 }

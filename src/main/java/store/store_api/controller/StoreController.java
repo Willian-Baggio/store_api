@@ -6,23 +6,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-import store.store_api.dto.foods.AlterFoodsDTO;
-import store.store_api.dto.foods.FoodsDTO;
-import store.store_api.model.Foods;
-import store.store_api.service.FoodService;
+import store.store_api.dto.stores.AlterStoreDTO;
+import store.store_api.dto.stores.StoreCreateDTO;
+import store.store_api.service.StoreService;
 
 @RestController
-@RequestMapping("foods")
-public class FoodsController {
+@RequestMapping("store")
+public class StoreController {
 
     @Autowired
-    private FoodService foodService;
+    private StoreService storeService;
 
     @PostMapping
-    public ResponseEntity foodsRegister(@RequestBody @Valid FoodsDTO foodsDTO, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity storeCreate(@RequestBody @Valid StoreCreateDTO storeCreateDTO, UriComponentsBuilder uriBuilder) {
         try {
-            var dto = foodService.createFood(foodsDTO);
-            var uri = uriBuilder.path("/foods/{id}").buildAndExpand(dto.getId()).toUri();
+            var dto = storeService.createStore(storeCreateDTO);
+            var uri = uriBuilder.path("/store/{id}").buildAndExpand(dto.getId()).toUri();
 
             return ResponseEntity.created(uri).body(dto);
         } catch (ValidationException e) {
@@ -31,9 +30,9 @@ public class FoodsController {
     }
 
     @PutMapping
-    public ResponseEntity alterFood(@RequestBody @Valid AlterFoodsDTO alterFoodsDTO) {
+    public ResponseEntity alterStore(@RequestBody @Valid AlterStoreDTO alterStoreDTO) {
         try {
-            var dto = foodService.alterFood(alterFoodsDTO);
+            var dto = storeService.alterStore(alterStoreDTO);
             return ResponseEntity.ok(dto);
         } catch (ValidationException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -41,10 +40,10 @@ public class FoodsController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteFood(@PathVariable Long id) {
+    public ResponseEntity deleteStore(@PathVariable Long id) {
         try {
-            foodService.deleteFood(id);
-            return ResponseEntity.noContent().build();
+            storeService.deleteStore(id);
+            return ResponseEntity.ok("Store delete");
         } catch (ValidationException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
