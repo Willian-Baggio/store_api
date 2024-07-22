@@ -29,6 +29,16 @@ public class StoreController {
         }
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity listStore(@PathVariable Long id) {
+        try {
+            var stores = storeService.listStore(id);
+            return ResponseEntity.ok(stores);
+        } catch (ValidationException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @PutMapping
     public ResponseEntity alterStore(@RequestBody @Valid AlterStoreDTO alterStoreDTO) {
         try {

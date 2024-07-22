@@ -3,6 +3,7 @@ package store.store_api.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import store.store_api.dto.stores.AlterStoreDTO;
+import store.store_api.dto.stores.ListStoreDTO;
 import store.store_api.dto.stores.StoreCreateDTO;
 import store.store_api.exception.ValidacaoExcpetion;
 import store.store_api.model.Stores;
@@ -36,4 +37,11 @@ public class StoreService {
         storesRepository.deleteById(id);
     }
 
+    public ListStoreDTO listStore(Long id) {
+        if (!storesRepository.existsById(id)) {
+            throw new ValidacaoExcpetion("Store with ID " + id + " does not exist.");
+        }
+        var store = storesRepository.getReferenceById(id);
+        return new ListStoreDTO(store);
+    }
 }

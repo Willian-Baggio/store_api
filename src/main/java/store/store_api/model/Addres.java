@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import store.store_api.dto.addres.AddresDataDTO;
+import store.store_api.dto.addres.AlterAddresDTO;
 
 import java.util.List;
 
@@ -46,5 +47,8 @@ public class Addres {
     }
 
     public Addres(Addres addres) {
+    }
+
+    public Addres(AlterAddresDTO alterAddresDTO) {
     }
 }

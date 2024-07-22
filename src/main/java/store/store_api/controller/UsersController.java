@@ -29,6 +29,16 @@ public class UsersController {
         }
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity listUser(@PathVariable Long id) {
+        try {
+            var users = usersService.listUser(id);
+            return ResponseEntity.ok(users);
+        } catch (ValidationException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @PutMapping
     public ResponseEntity alterUser(@RequestBody @Valid AlterUserDTO alterUserDTO) {
         try {
