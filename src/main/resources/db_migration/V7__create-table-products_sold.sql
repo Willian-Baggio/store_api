@@ -1,5 +1,5 @@
 CREATE TABLE products_sold (
-  product_sold_id INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
   food_id INTEGER,
   drink_id INTEGER,
   sale_id INTEGER

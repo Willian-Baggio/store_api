@@ -3,6 +3,8 @@ package store.store_api.dto.drinks;
 import jakarta.validation.constraints.NotBlank;
 import store.store_api.model.Drinks;
 
+import java.text.DecimalFormat;
+
 public record DrinksDTO(
         @NotBlank
         String drinkName,
@@ -11,7 +13,7 @@ public record DrinksDTO(
         Integer quantity,
 
         @NotBlank
-        Integer price,
+        DecimalFormat price,
 
         String descripton
 ) {

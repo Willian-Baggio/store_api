@@ -13,7 +13,7 @@ public record AddresDataDTO(
     String neighborhood,
 
     @NotBlank
-    @Pattern(regexp = "\\d{8}")
+    @Pattern(regexp = "\\d{5}-\\d{3}", message = "Zip code must follow the pattern 12345-678")
     String zipCode,
 
     @NotBlank

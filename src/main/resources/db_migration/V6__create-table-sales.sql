@@ -1,5 +1,5 @@
 CREATE TABLE sales (
-  sale_id INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
   store_id INTEGER,
   user_id INTEGER,
   sale_date DATETIME,

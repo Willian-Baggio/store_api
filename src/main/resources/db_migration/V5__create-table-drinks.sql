@@ -1,5 +1,5 @@
 CREATE TABLE drinks (
-  drink_id INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
   drink_name VARCHAR(50),
   store_id INTEGER,
   quantity INTEGER,

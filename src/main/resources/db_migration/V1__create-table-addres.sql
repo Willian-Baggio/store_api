@@ -1,5 +1,5 @@
 CREATE TABLE addres (
-  addres_id INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
   street VARCHAR(50),
   neighborhood VARCHAR(50),
   zip_code VARCHAR(20),

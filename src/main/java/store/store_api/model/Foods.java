@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import store.store_api.dto.foods.AlterFoodsDTO;
 import store.store_api.dto.foods.FoodsDTO;
 
+import java.text.DecimalFormat;
+
 @Table(name = "foods")
 @Entity(name = "Foods")
 @Getter
@@ -22,7 +24,7 @@ public class Foods {
 
     private String foodName;
     private Integer quantity;
-    private Integer price;
+    private DecimalFormat price;
     private String description;
 
     public Foods(FoodsDTO foodsDTO) {

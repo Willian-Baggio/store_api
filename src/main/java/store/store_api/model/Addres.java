@@ -33,9 +33,6 @@ public class Addres {
     @OneToMany(fetch = FetchType.LAZY)
     private List<Users> users;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    private Stores store;
-
     public Addres(AddresDataDTO data) {
         this.street = data.street();
         this.neighborhood = data.neighborhood();

@@ -2,6 +2,8 @@ package store.store_api.dto.foods;
 
 import jakarta.validation.constraints.NotBlank;
 
+import java.text.DecimalFormat;
+
 public record FoodsDTO(
         @NotBlank
         String foodName,
@@ -10,7 +12,7 @@ public record FoodsDTO(
         Integer quantity,
 
         @NotBlank
-        Integer price,
+        DecimalFormat price,
 
         String descripton
 ) {

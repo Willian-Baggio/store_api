@@ -1,5 +1,5 @@
 CREATE TABLE foods (
-  food_id INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
   food_name VARCHAR(50),
   store_id INTEGER,
   quantity INTEGER,
