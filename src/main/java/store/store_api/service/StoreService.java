@@ -6,7 +6,9 @@ import store.store_api.dto.stores.AlterStoreDTO;
 import store.store_api.dto.stores.ListStoreDTO;
 import store.store_api.dto.stores.StoreCreateDTO;
 import store.store_api.exception.ValidacaoExcpetion;
+import store.store_api.model.Addres;
 import store.store_api.model.Stores;
+import store.store_api.repository.AddresRepository;
 import store.store_api.repository.StoresRepository;
 
 @Service
@@ -15,9 +17,16 @@ public class StoreService {
     @Autowired
     private StoresRepository storesRepository;
 
+    @Autowired
+    private AddresRepository addresRepository;
+
     public Stores createStore(StoreCreateDTO storeCreateDTO) {
-        var stores = new Stores(storeCreateDTO);
-        storesRepository.save(stores);
+        var addressDTO = storeCreateDTO.addres();
+        var addres = new Addres(addressDTO);
+        addres = addresRepository.save(addres);
+
+        var stores = new Stores(storeCreateDTO.storeName(), addres);
+        stores = storesRepository.save(stores);
         return new Stores(stores);
     }
 

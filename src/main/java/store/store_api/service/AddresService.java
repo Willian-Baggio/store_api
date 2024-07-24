@@ -20,7 +20,8 @@ public class AddresService {
             throw new BadRequestException("CEP já cadastrado");
         }
 
-        var addres = new Addres(data);
+        var addres = new Addres(data.street(), data.neighborhood(),
+                data.zipCode(), data.number(), data.complement(), data.city(), data.uf());
         addresRepository.save(addres);
         return new Addres(addres);
     }

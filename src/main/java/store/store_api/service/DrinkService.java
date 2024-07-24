@@ -21,7 +21,9 @@ public class DrinkService {
     private List<ValidationDrink> validationDrink;
 
     public Drinks createDrinks(DrinksDTO drinksDTO) {
-        var drinks = new Drinks(drinksDTO);
+
+        var drinks = new Drinks(drinksDTO.drinkName(), drinksDTO.quantity(),
+                drinksDTO.price(), drinksDTO.description());
         drinksRepository.save(drinks);
         return new Drinks(drinks);
     }

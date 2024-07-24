@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import store.store_api.model.Sales;
 import store.store_api.model.Stores;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record AlterSalesDTO(
@@ -20,7 +21,7 @@ public record AlterSalesDTO(
         Integer quantitySold,
 
         @NotNull
-        Integer totalPrice,
+        BigDecimal totalPrice,
 
         @NotNull
         String paymentMethood

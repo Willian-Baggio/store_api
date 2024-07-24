@@ -1,19 +1,21 @@
 package store.store_api.dto.foods;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 public record FoodsDTO(
         @NotBlank
         String foodName,
 
-        @NotBlank
+        @NotNull
         Integer quantity,
 
-        @NotBlank
-        DecimalFormat price,
+        @NotNull
+        BigDecimal price,
 
-        String descripton
+        String description
 ) {
 }

@@ -6,8 +6,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import store.store_api.dto.sales.AlterSalesDTO;
-import store.store_api.dto.sales.SalesDTO;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Table(name = "sales")
@@ -30,18 +30,25 @@ public class Sales {
 
     private LocalDateTime saleDate;
     private Integer quantitySold;
-    private Integer totalPrice;
+    private BigDecimal totalPrice;
     private String paymentMethood;
 
-    public Sales(SalesDTO salesDTO) {
-        this.stores = salesDTO.stores();
-        this.saleDate = salesDTO.saleDate();
-        this.quantitySold = salesDTO.quantitySold();
-        this.totalPrice = salesDTO.totalPrice();
-        this.paymentMethood = salesDTO.paymentMethood();
+    public Sales(Sales sales) {
+        this.id = sales.getId();
+        this.stores = sales.getStores();
+        this.users = sales.getUsers();
+        this.saleDate = LocalDateTime.now();
+        this.quantitySold = sales.getQuantitySold();
+        this.totalPrice = sales.getTotalPrice();
+        this.paymentMethood = sales.getPaymentMethood();
     }
 
-    public Sales(Sales sales) {
+    public Sales(Stores stores, Users users, Integer quantitySold, BigDecimal totalPrice, String paymentMethood) {
+        this.stores = stores;
+        this.users = users;
+        this.quantitySold = quantitySold;
+        this.totalPrice = totalPrice;
+        this.paymentMethood = paymentMethood;
     }
 
     public Sales(AlterSalesDTO alterSalesDTO) {

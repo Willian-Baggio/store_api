@@ -1,8 +1,13 @@
 package store.store_api.dto.users;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import store.store_api.dto.addres.AddresDataDTO;
 
 public record UserCreateDTO(
+        @NotBlank
+        String login,
+
         @NotBlank
         String username,
 
@@ -16,6 +21,9 @@ public record UserCreateDTO(
         String cellphone,
 
         @NotBlank
-        String cpf
+        String cpf,
+
+        @NotNull
+        AddresDataDTO addres
 ) {
 }

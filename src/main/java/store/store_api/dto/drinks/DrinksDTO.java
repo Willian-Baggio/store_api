@@ -1,21 +1,22 @@
 package store.store_api.dto.drinks;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import store.store_api.model.Drinks;
 
-import java.text.DecimalFormat;
+import java.math.BigDecimal;
 
 public record DrinksDTO(
         @NotBlank
         String drinkName,
 
-        @NotBlank
+        @NotNull
         Integer quantity,
 
-        @NotBlank
-        DecimalFormat price,
+        @NotNull
+        BigDecimal price,
 
-        String descripton
+        String description
 ) {
         public DrinksDTO(Drinks drinks) {
                 this(drinks.getDrinkName(), drinks.getQuantity(),

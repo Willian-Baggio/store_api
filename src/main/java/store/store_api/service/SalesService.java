@@ -7,6 +7,8 @@ import store.store_api.dto.sales.SalesDTO;
 import store.store_api.exception.ValidacaoExcpetion;
 import store.store_api.model.Sales;
 import store.store_api.repository.SalesRepository;
+import store.store_api.repository.StoresRepository;
+import store.store_api.repository.UsersRepository;
 
 @Service
 public class SalesService {
@@ -14,8 +16,18 @@ public class SalesService {
     @Autowired
     private SalesRepository salesRepository;
 
+    @Autowired
+    private StoresRepository storesRepository;
+
+    @Autowired
+    private UsersRepository usersRepository;
+
     public Sales createSales(SalesDTO salesDTO) {
-        var sales = new Sales(salesDTO);
+        var stores = storesRepository.findById(salesDTO.storeId()).get();
+        var users = usersRepository.findById(salesDTO.userId()).get();
+
+        var sales = new Sales(stores, users,
+                salesDTO.quantitySold(), salesDTO.totalPrice(), salesDTO.paymentMethood());
         salesRepository.save(sales);
         return new Sales(sales);
     }

@@ -4,6 +4,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import store.store_api.model.Drinks;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+
 public record AlterDrinksDTO(
         @NotNull
         Long id,
@@ -11,11 +14,11 @@ public record AlterDrinksDTO(
         @NotBlank
         String drinkName,
 
-        @NotBlank
+        @NotNull
         Integer quantity,
 
-        @NotBlank
-        Integer price,
+        @NotNull
+        BigDecimal price,
 
         String description
 ) {

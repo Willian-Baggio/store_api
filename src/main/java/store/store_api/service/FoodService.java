@@ -15,7 +15,8 @@ public class FoodService {
     private FoodsRepository foodsRepository;
 
     public Foods createFood(FoodsDTO foodsDTO) {
-        var foods = new Foods(foodsDTO);
+        var foods = new Foods(foodsDTO.foodName(), foodsDTO.quantity(), foodsDTO.price(),
+                foodsDTO.description());
         foodsRepository.save(foods);
         return new Foods(foods);
     }
