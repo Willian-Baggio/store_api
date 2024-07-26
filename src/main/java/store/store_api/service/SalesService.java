@@ -28,8 +28,8 @@ public class SalesService {
 
         var sales = new Sales(stores, users,
                 salesDTO.quantitySold(), salesDTO.totalPrice(), salesDTO.paymentMethood());
-        salesRepository.save(sales);
-        return new Sales(sales);
+
+        return salesRepository.save(sales);
     }
 
     public AlterSalesDTO alterSales(AlterSalesDTO alterSalesDTO) {

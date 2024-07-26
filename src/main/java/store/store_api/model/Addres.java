@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 import store.store_api.dto.addres.AddresDataDTO;
 import store.store_api.dto.addres.AlterAddresDTO;
 
-import java.util.List;
-
 @Table(name = "addres")
 @Entity(name = "Addres")
 @Getter

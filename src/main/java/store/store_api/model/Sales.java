@@ -33,22 +33,13 @@ public class Sales {
     private BigDecimal totalPrice;
     private String paymentMethood;
 
-    public Sales(Sales sales) {
-        this.id = sales.getId();
-        this.stores = sales.getStores();
-        this.users = sales.getUsers();
-        this.saleDate = LocalDateTime.now();
-        this.quantitySold = sales.getQuantitySold();
-        this.totalPrice = sales.getTotalPrice();
-        this.paymentMethood = sales.getPaymentMethood();
-    }
-
     public Sales(Stores stores, Users users, Integer quantitySold, BigDecimal totalPrice, String paymentMethood) {
         this.stores = stores;
         this.users = users;
         this.quantitySold = quantitySold;
         this.totalPrice = totalPrice;
         this.paymentMethood = paymentMethood;
+        this.saleDate = LocalDateTime.now();
     }
 
     public Sales(AlterSalesDTO alterSalesDTO) {
