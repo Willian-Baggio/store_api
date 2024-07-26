@@ -21,22 +21,19 @@ public class DrinkService {
     private List<ValidationDrink> validationDrink;
 
     public Drinks createDrinks(DrinksDTO drinksDTO) {
-
         var drinks = new Drinks(drinksDTO.drinkName(), drinksDTO.quantity(),
                 drinksDTO.price(), drinksDTO.description());
-        drinksRepository.save(drinks);
-        return new Drinks(drinks);
+        return drinksRepository.save(drinks);
     }
 
-    public AlterDrinksDTO alterDrink(AlterDrinksDTO alterDrinksDTO){
+    public Drinks alterDrink(AlterDrinksDTO alterDrinksDTO){
         if (!drinksRepository.existsById(alterDrinksDTO.id())) {
             throw new ValidationException("Drink with ID " + alterDrinksDTO.id() + " does not exist.");
         }
-        validationDrink.forEach(v -> v.drinkValidation(alterDrinksDTO));
 
-        var drinks = new Drinks(alterDrinksDTO);
-        drinksRepository.save(drinks);
-        return new AlterDrinksDTO(drinks);
+        var drink = drinksRepository.getReferenceById(alterDrinksDTO.id());
+        drink.update(alterDrinksDTO);
+        return drinksRepository.save(drink);
     }
 
     public void removeDrink(Long id){

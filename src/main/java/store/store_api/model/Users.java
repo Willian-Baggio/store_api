@@ -7,10 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import store.store_api.dto.addres.AddresDataDTO;
-import store.store_api.dto.users.UserCreateDTO;
+import store.store_api.dto.users.AlterUserDTO;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -39,14 +37,8 @@ public class Users implements UserDetails {
     private String cpf;
     private LocalDateTime registrationDate;
 
-//    @Enumerated(EnumType.STRING)
-//    private Roles roles;
-
     @ManyToOne(fetch = FetchType.LAZY)
     private Addres addres;
-
-//    @OneToMany(fetch = FetchType.LAZY)
-//    private List<Sales> sales;
 
     public Users(Users users) {
         this.id = users.getId();
@@ -67,7 +59,29 @@ public class Users implements UserDetails {
         this.email = email;
         this.cellphone = cellphone;
         this.cpf = cpf;
+        this.registrationDate = LocalDateTime.now();
         this.addres = addres;
+    }
+
+    public void update(AlterUserDTO alterUserDTO) {
+        if (alterUserDTO.username() != null) {
+            this.username = alterUserDTO.username();
+        }
+        if (alterUserDTO.email() != null) {
+            this.email = alterUserDTO.email();
+        }
+        if (alterUserDTO.cellphone() != null) {
+            this.cellphone = alterUserDTO.cellphone();
+        }
+        if (alterUserDTO.cpf() != null) {
+            this.cpf = alterUserDTO.cpf();
+        }
+        if (alterUserDTO.cpf() != null) {
+            this.cpf = alterUserDTO.cpf();
+        }
+        if (alterUserDTO.addres() != null) {
+            this.addres.update(alterUserDTO.addres());
+        }
     }
 
     @Override
@@ -94,4 +108,5 @@ public class Users implements UserDetails {
     public boolean isEnabled() {
         return UserDetails.super.isEnabled();
     }
+
 }

@@ -36,13 +36,13 @@ public class UsersService {
         return new Users(users);
     }
 
-    public AlterUserDTO alterUser(AlterUserDTO alterUserDTO) {
+    public Users alterUser(AlterUserDTO alterUserDTO) {
         if (!usersRepository.existsById(alterUserDTO.id())) {
             throw new ValidationException("User with ID " + alterUserDTO.id() + " does not exist.");
         }
-        var users = new Users();
-        usersRepository.save(users);
-        return new AlterUserDTO(users);
+        var users = usersRepository.getReferenceById(alterUserDTO.id());
+        users.update(alterUserDTO);
+        return usersRepository.save(users);
     }
 
     public void deleteUser(Long id) {

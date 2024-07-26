@@ -1,15 +1,11 @@
 package store.store_api.controller;
 
 import jakarta.validation.Valid;
-import jakarta.validation.ValidationException;
-import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 import store.store_api.dto.addres.AddresDataDTO;
 import store.store_api.dto.addres.AlterAddresDTO;
-import store.store_api.repository.AddresRepository;
+import store.store_api.dto.addres.ResponseAddresDTO;
 import store.store_api.service.AddresService;
 
 @RestController
@@ -20,34 +16,21 @@ public class AddresController {
     private AddresService addresService;
 
     @PostMapping
-    public ResponseEntity addresRegister(@RequestBody @Valid AddresDataDTO data, UriComponentsBuilder uriBuilder) throws BadRequestException {
-        try {
-            var dto = addresService.addresRegister(data);
-            var uri = uriBuilder.path("/addres/{id}").buildAndExpand(dto.getId()).toUri();
-
-            return ResponseEntity.created(uri).body(dto);
-        } catch (ValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseAddresDTO addresRegister(@RequestBody @Valid AddresDataDTO data) {
+        var dto = addresService.addresRegister(data);
+        return new ResponseAddresDTO(dto.getStreet(), dto.getNeighborhood(),
+                dto.getZipCode(), dto.getNumber(), dto.getComplement(),
+                dto.getCity(), dto.getUf());
     }
 
     @PutMapping
-    public ResponseEntity alterAddres(@RequestBody @Valid AlterAddresDTO alterAddresDTO) {
-        try {
-            var dto = addresService.alterAddres(alterAddresDTO);
-            return ResponseEntity.ok(dto);
-        } catch (ValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public AlterAddresDTO alterAddres(@RequestBody @Valid AlterAddresDTO alterAddresDTO) {
+        var dto = addresService.alterAddres(alterAddresDTO);
+        return new AlterAddresDTO(dto);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteAddres(@PathVariable Long id) {
-        try {
-            addresService.deleteAddres(id);
-            return ResponseEntity.noContent().build();
-        } catch (ValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public void deleteAddres(@PathVariable Long id) {
+        addresService.deleteAddres(id);
     }
 }

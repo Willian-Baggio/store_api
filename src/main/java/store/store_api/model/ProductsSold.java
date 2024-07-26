@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import store.store_api.dto.productsSold.ProductSoldDTO;
+import store.store_api.dto.productsSold.AlterProductSoldDTO;
 
 @Table(name = "product_sold")
 @Entity(name = "ProductSold")
@@ -28,6 +28,21 @@ public class ProductsSold {
     @ManyToOne(fetch = FetchType.LAZY)
     private Sales sales;
 
-    public ProductsSold(ProductSoldDTO productSoldDTO) {
+    public ProductsSold(Foods foods, Drinks drinks, Sales sales) {
+        this.foods = foods;
+        this.drinks = drinks;
+        this.sales = sales;
+    }
+
+    public void update(AlterProductSoldDTO alterProductSoldDTO) {
+        if (alterProductSoldDTO.foods() != null) {
+            this.foods = alterProductSoldDTO.foods();
+        }
+        if (alterProductSoldDTO.drinks() != null) {
+            this.drinks = alterProductSoldDTO.drinks();
+        }
+        if (alterProductSoldDTO.sales() != null) {
+            this.sales = alterProductSoldDTO.sales();
+        }
     }
 }

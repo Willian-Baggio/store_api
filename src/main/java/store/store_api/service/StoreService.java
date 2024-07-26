@@ -22,21 +22,22 @@ public class StoreService {
 
     public Stores createStore(StoreCreateDTO storeCreateDTO) {
         var addressDTO = storeCreateDTO.addres();
-        var addres = new Addres(addressDTO);
+        var addres = new Addres(addressDTO.street(), addressDTO.neighborhood(),
+                addressDTO.zipCode(), addressDTO.number(), addressDTO.complement(),
+                addressDTO.city(), addressDTO.uf());
         addres = addresRepository.save(addres);
 
         var stores = new Stores(storeCreateDTO.storeName(), addres);
-        stores = storesRepository.save(stores);
-        return new Stores(stores);
+        return storesRepository.save(stores);
     }
 
-    public AlterStoreDTO alterStore(AlterStoreDTO alterStoreDTO) {
+    public Stores alterStore(AlterStoreDTO alterStoreDTO) {
         if (!storesRepository.existsById(alterStoreDTO.id())) {
             throw new ValidacaoExcpetion("Store with ID " + alterStoreDTO.id() + " does not exist.");
         }
-        var stores = new Stores(alterStoreDTO);
-        storesRepository.save(stores);
-        return new AlterStoreDTO(stores);
+        var stores = storesRepository.getReferenceById(alterStoreDTO.id());
+        stores.update(alterStoreDTO);
+        return storesRepository.save(stores);
     }
 
     public void deleteStore(Long id) {

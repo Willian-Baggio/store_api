@@ -9,10 +9,8 @@ import store.store_api.model.Sales;
 public record AlterProductSoldDTO(
         @NotNull
         Long id,
-
         Foods foods,
         Drinks drinks,
-
         @NotNull
         Sales sales
 ) {

@@ -6,10 +6,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import store.store_api.dto.foods.AlterFoodsDTO;
-import store.store_api.dto.foods.FoodsDTO;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 
 @Table(name = "foods")
 @Entity(name = "Foods")
@@ -28,21 +26,6 @@ public class Foods {
     private BigDecimal price;
     private String description;
 
-    public Foods(FoodsDTO foodsDTO) {
-        this.foodName = foodsDTO.foodName();
-        this.quantity = foodsDTO.quantity();
-        this.price = foodsDTO.price();
-        this.description = foodsDTO.description();
-    }
-
-    public Foods(Foods foods) {
-        this.id = foods.getId();
-        this.foodName = foods.getFoodName();
-        this.quantity = foods.getQuantity();
-        this.price = foods.getPrice();
-        this.description = foods.getDescription();
-    }
-
     public Foods(String foodName, Integer quantity, BigDecimal price, String description) {
         this.foodName = foodName;
         this.quantity = quantity;
@@ -50,7 +33,18 @@ public class Foods {
         this.description = description;
     }
 
-    public Foods(AlterFoodsDTO alterFoodsDTO) {
+    public void update(AlterFoodsDTO alterFoodsDTO) {
+        if (alterFoodsDTO.foodName() != null) {
+            this.foodName = alterFoodsDTO.foodName();
+        }
+        if (alterFoodsDTO.quantity() != null) {
+            this.quantity = alterFoodsDTO.quantity();
+        }
+        if (alterFoodsDTO.price() != null) {
+            this.price = alterFoodsDTO.price();
+        }
+        if (alterFoodsDTO.description() != null) {
+            this.description = alterFoodsDTO.description();
+        }
     }
-
 }

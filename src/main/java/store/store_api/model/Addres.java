@@ -28,19 +28,6 @@ public class Addres {
     private String city;
     private String uf;
 
-//    @OneToMany(fetch = FetchType.LAZY)
-//    private List<Users> users;
-
-    public Addres(AddresDataDTO data) {
-        this.street = data.street();
-        this.neighborhood = data.neighborhood();
-        this.zipCode = data.zipCode();
-        this.number = data.number();
-        this.complement = data.complement();
-        this.city = data.city();
-        this.uf = data.uf();
-    }
-
     public Addres(Addres addres) {
         this.id = addres.getId();
         this.street = addres.getStreet();
@@ -62,6 +49,34 @@ public class Addres {
         this.uf = uf;
     }
 
-    public Addres(AlterAddresDTO alterAddresDTO) {
+    public Addres(AddresDataDTO addressDTO) {
+        this.street = addressDTO.street();
+        this.neighborhood = addressDTO.neighborhood();
+        this.zipCode = addressDTO.getZipCode();
+        this.number = addressDTO.number();
+        this.complement = addressDTO.complement();
+        this.city = addressDTO.city();
+        this.uf = addressDTO.uf();
+    }
+
+    public void update(AlterAddresDTO alterAddresDTO) {
+        if (alterAddresDTO.street() != null) {
+            this.street = alterAddresDTO.street();
+        }
+        if (alterAddresDTO.neighborhood() != null) {
+            this.neighborhood = alterAddresDTO.neighborhood();
+        }
+        if (alterAddresDTO.zipCode() != null) {
+            this.zipCode = alterAddresDTO.zipCode();
+        }
+        if (alterAddresDTO.number() != null) {
+            this.number = alterAddresDTO.number();
+        }
+        if (alterAddresDTO.city() != null) {
+            this.city = alterAddresDTO.city();
+        }
+        if (alterAddresDTO.uf() != null) {
+            this.uf = alterAddresDTO.uf();
+        }
     }
 }

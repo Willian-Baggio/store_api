@@ -6,7 +6,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import store.store_api.dto.drinks.AlterDrinksDTO;
-import store.store_api.dto.drinks.DrinksDTO;
 
 import java.math.BigDecimal;
 
@@ -27,21 +26,6 @@ public class Drinks {
     private BigDecimal price;
     private String description;
 
-    public Drinks(DrinksDTO drinksDTO) {
-        this.drinkName = drinksDTO.drinkName();
-        this.quantity = drinksDTO.quantity();
-        this.price = drinksDTO.price();
-        this.description = drinksDTO.description();
-    }
-
-    public Drinks(Drinks drinks){
-        this.id = drinks.getId();
-        this.drinkName = drinks.getDrinkName();
-        this.quantity = drinks.getQuantity();
-        this.price = drinks.getPrice();
-        this.description = drinks.getDescription();
-    }
-
     public Drinks(String drinkName, Integer quantity, BigDecimal price, String description) {
         this.drinkName = drinkName;
         this.quantity = quantity;
@@ -49,6 +33,18 @@ public class Drinks {
         this.description = description;
     }
 
-    public Drinks(AlterDrinksDTO alterDrinksDTO) {
+    public void update(AlterDrinksDTO alterDrinksDTO) {
+        if (alterDrinksDTO.drinkName() != null) {
+            this.drinkName = alterDrinksDTO.drinkName();
+        }
+        if (alterDrinksDTO.quantity() != null) {
+            this.quantity = alterDrinksDTO.quantity();
+        }
+        if (alterDrinksDTO.price() != null) {
+            this.price = alterDrinksDTO.price();
+        }
+        if (alterDrinksDTO.description() != null) {
+            this.description = alterDrinksDTO.description();
+        }
     }
 }

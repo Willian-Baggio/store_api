@@ -5,8 +5,9 @@ import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
+import store.store_api.dto.addres.AlterAddresDTO;
 import store.store_api.dto.users.AlterUserDTO;
+import store.store_api.dto.users.ResponseUserDTO;
 import store.store_api.dto.users.UserCreateDTO;
 import store.store_api.service.UsersService;
 
@@ -16,18 +17,6 @@ public class UsersController {
 
     @Autowired
     private UsersService usersService;
-
-    @PostMapping
-    public ResponseEntity userRegister(@RequestBody @Valid UserCreateDTO userCreateDTO, UriComponentsBuilder uriBuilder) {
-        try {
-            var dto = usersService.createUser(userCreateDTO);
-            var uri = uriBuilder.path("/users/{id}").buildAndExpand(dto.getId()).toUri();
-
-            return ResponseEntity.created(uri).body(dto);
-        } catch (ValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity listUser(@PathVariable Long id) {
@@ -39,23 +28,22 @@ public class UsersController {
         }
     }
 
+    @PostMapping
+    public ResponseUserDTO userRegister(@RequestBody @Valid UserCreateDTO userCreateDTO) {
+        var dto = usersService.createUser(userCreateDTO);
+        return new ResponseUserDTO(dto.getId(), dto.getUsername(), dto.getEmail(),
+                dto.getCellphone(), dto.getCpf(), dto.getRegistrationDate(), dto.getAddres());
+    }
+
     @PutMapping
-    public ResponseEntity alterUser(@RequestBody @Valid AlterUserDTO alterUserDTO) {
-        try {
-            var dto = usersService.alterUser(alterUserDTO);
-            return ResponseEntity.ok(dto);
-        } catch (ValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public AlterUserDTO alterUser(@RequestBody @Valid AlterUserDTO alterUserDTO) {
+        var dto = usersService.alterUser(alterUserDTO);
+        return new AlterUserDTO(dto.getId(), dto.getUsername(), dto.getEmail(),
+                dto.getCellphone(), dto.getCpf(), new AlterAddresDTO(dto.getAddres()));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteUser(@PathVariable Long id) {
-        try {
-            usersService.deleteUser(id);
-            return ResponseEntity.noContent().build();
-        } catch (ValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public void deleteUser(@PathVariable Long id) {
+        usersService.deleteUser(id);
     }
 }

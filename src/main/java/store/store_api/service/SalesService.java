@@ -32,13 +32,13 @@ public class SalesService {
         return salesRepository.save(sales);
     }
 
-    public AlterSalesDTO alterSales(AlterSalesDTO alterSalesDTO) {
+    public Sales alterSales(AlterSalesDTO alterSalesDTO) {
         if (!salesRepository.existsById(alterSalesDTO.id())) {
             throw new ValidacaoExcpetion("Sales with ID " + alterSalesDTO.id() + " does not exist.");
         }
-        var sales = new Sales(alterSalesDTO);
-        salesRepository.save(sales);
-        return new AlterSalesDTO(sales);
+        var sales = salesRepository.getReferenceById(alterSalesDTO.id());
+        sales.update(alterSalesDTO);
+        return salesRepository.save(sales);
     }
 
     public void deleteSales(Long id) {

@@ -1,13 +1,11 @@
 package store.store_api.controller;
 
 import jakarta.validation.Valid;
-import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 import store.store_api.dto.drinks.AlterDrinksDTO;
 import store.store_api.dto.drinks.DrinksDTO;
+import store.store_api.dto.drinks.ResponseDrinksDTO;
 import store.store_api.service.DrinkService;
 
 @RestController
@@ -18,34 +16,22 @@ public class DrinksController {
     private DrinkService drinkService;
 
     @PostMapping
-    public ResponseEntity drinksRegister(@RequestBody @Valid DrinksDTO drinksDTO, UriComponentsBuilder uriBuilder) {
-        try {
-            var dto = drinkService.createDrinks(drinksDTO);
-            var uri = uriBuilder.path("/drinks/{id}").buildAndExpand(dto.getId()).toUri();
+    public ResponseDrinksDTO drinksRegister(@RequestBody @Valid DrinksDTO drinksDTO) {
+        var dto = drinkService.createDrinks(drinksDTO);
 
-            return ResponseEntity.created(uri).body(dto);
-        } catch (ValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        return new ResponseDrinksDTO(dto.getId(), dto.getDrinkName(), dto.getQuantity(),
+                dto.getPrice(), dto.getDescription());
     }
 
     @PutMapping
-    public ResponseEntity alterDrink(@RequestBody @Valid AlterDrinksDTO alterDrinksDTO) {
-        try {
-            var dto = drinkService.alterDrink(alterDrinksDTO);
-            return ResponseEntity.ok(dto);
-        } catch (ValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public AlterDrinksDTO alterDrink(@RequestBody @Valid AlterDrinksDTO alterDrinksDTO) {
+        var dto = drinkService.alterDrink(alterDrinksDTO);
+        return new AlterDrinksDTO(dto.getId(), dto.getDrinkName(), dto.getQuantity(),
+                dto.getPrice(), dto.getDescription());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteDrink(@PathVariable Long id) {
-        try {
-            drinkService.removeDrink(id);
-            return ResponseEntity.noContent().build();
-        } catch (ValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public void deleteDrink(@PathVariable Long id) {
+        drinkService.removeDrink(id);
     }
 }

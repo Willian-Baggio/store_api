@@ -17,17 +17,17 @@ public class FoodService {
     public Foods createFood(FoodsDTO foodsDTO) {
         var foods = new Foods(foodsDTO.foodName(), foodsDTO.quantity(), foodsDTO.price(),
                 foodsDTO.description());
-        foodsRepository.save(foods);
-        return new Foods(foods);
+        return foodsRepository.save(foods);
     }
 
-    public AlterFoodsDTO alterFood(AlterFoodsDTO alterFoodsDTO) {
+    public Foods alterFood(AlterFoodsDTO alterFoodsDTO) {
         if (!foodsRepository.existsById(alterFoodsDTO.id())) {
             throw new ValidacaoExcpetion("Food with ID " + alterFoodsDTO.id() + " does not exist.");
         }
-        var foods = new Foods(alterFoodsDTO);
-        foodsRepository.save(foods);
-        return new AlterFoodsDTO(foods);
+
+        var foods = foodsRepository.getReferenceById(alterFoodsDTO.id());
+        foods.update(alterFoodsDTO);
+        return foodsRepository.save(foods);
     }
 
     public void deleteFood(Long id) {

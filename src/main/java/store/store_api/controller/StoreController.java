@@ -1,12 +1,12 @@
 package store.store_api.controller;
 
 import jakarta.validation.Valid;
-import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
+import store.store_api.dto.addres.AlterAddresDTO;
 import store.store_api.dto.stores.AlterStoreDTO;
+import store.store_api.dto.stores.ListStoreDTO;
+import store.store_api.dto.stores.ResponseStoreDTO;
 import store.store_api.dto.stores.StoreCreateDTO;
 import store.store_api.service.StoreService;
 
@@ -17,45 +17,26 @@ public class StoreController {
     @Autowired
     private StoreService storeService;
 
-    @PostMapping
-    public ResponseEntity storeCreate(@RequestBody @Valid StoreCreateDTO storeCreateDTO, UriComponentsBuilder uriBuilder) {
-        try {
-            var dto = storeService.createStore(storeCreateDTO);
-            var uri = uriBuilder.path("/store/{id}").buildAndExpand(dto.getId()).toUri();
-
-            return ResponseEntity.created(uri).body(dto);
-        } catch (ValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @GetMapping("/{id}")
+    public ListStoreDTO listStore(@PathVariable Long id) {
+        var stores = storeService.listStore(id);
+        return stores;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity listStore(@PathVariable Long id) {
-        try {
-            var stores = storeService.listStore(id);
-            return ResponseEntity.ok(stores);
-        } catch (ValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @PostMapping
+    public ResponseStoreDTO createStore(@RequestBody @Valid StoreCreateDTO storeCreateDTO) {
+        var dto = storeService.createStore(storeCreateDTO);
+        return new ResponseStoreDTO(dto.getId(), dto.getStoreName(), dto.getAddres());
     }
 
     @PutMapping
-    public ResponseEntity alterStore(@RequestBody @Valid AlterStoreDTO alterStoreDTO) {
-        try {
-            var dto = storeService.alterStore(alterStoreDTO);
-            return ResponseEntity.ok(dto);
-        } catch (ValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public AlterStoreDTO alterStore(@RequestBody @Valid AlterStoreDTO alterStoreDTO) {
+        var dto = storeService.alterStore(alterStoreDTO);
+        return new AlterStoreDTO(dto.getId(), dto.getStoreName(), new AlterAddresDTO(dto.getAddres()));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteStore(@PathVariable Long id) {
-        try {
-            storeService.deleteStore(id);
-            return ResponseEntity.ok("Store delete");
-        } catch (ValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public void deleteStore(@PathVariable Long id) {
+        storeService.deleteStore(id);
     }
 }

@@ -42,6 +42,21 @@ public class Sales {
         this.saleDate = LocalDateTime.now();
     }
 
-    public Sales(AlterSalesDTO alterSalesDTO) {
+    public void update(AlterSalesDTO alterSalesDTO) {
+//        if (alterSalesDTO.storesId() != null) {
+//            this.stores = alterSalesDTO.storesId();
+//        }
+//        if (alterSalesDTO.usersId() != null) {
+//            this.users = alterSalesDTO.usersId();
+//        }
+        if (alterSalesDTO.quantitySold() != null) {
+            this.quantitySold = alterSalesDTO.quantitySold();
+        }
+        if (alterSalesDTO.totalPrice() != null) {
+            this.totalPrice = alterSalesDTO.totalPrice();
+        }
+        if (alterSalesDTO.paymentMethood() != null) {
+            this.paymentMethood = alterSalesDTO.paymentMethood();
+        }
     }
 }

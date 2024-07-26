@@ -1,16 +1,11 @@
 package store.store_api.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import store.store_api.dto.addres.AddresDataDTO;
 import store.store_api.dto.stores.AlterStoreDTO;
-import store.store_api.dto.stores.StoreCreateDTO;
-
-import java.util.List;
 
 @Table(name = "stores")
 @Entity(name = "Stores")
@@ -29,21 +24,17 @@ public class Stores {
     @OneToOne(fetch = FetchType.LAZY)
     private Addres addres;
 
-//    @OneToMany
-//    private List<Sales> sales;
-
-    public Stores(Stores stores) {
-        this.id = stores.getId();
-        this.storeName = stores.getStoreName();
-        this.addres = stores.getAddres();
-    }
-
     public Stores(String storeName, Addres addres) {
         this.storeName = storeName;
         this.addres = addres;
     }
 
-    public Stores(AlterStoreDTO alterStoreDTO) {
+    public void update(AlterStoreDTO alterStoreDTO) {
+        if (alterStoreDTO.storeName() != null) {
+            this.storeName = alterStoreDTO.storeName();
+        }
+        if (alterStoreDTO.addres() != null) {
+            this.addres.update(alterStoreDTO.addres());
+        }
     }
-
 }

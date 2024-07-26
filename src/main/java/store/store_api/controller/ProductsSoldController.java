@@ -1,13 +1,11 @@
 package store.store_api.controller;
 
 import jakarta.validation.Valid;
-import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 import store.store_api.dto.productsSold.AlterProductSoldDTO;
 import store.store_api.dto.productsSold.ProductSoldDTO;
+import store.store_api.dto.productsSold.ResponseProductSoldDTO;
 import store.store_api.service.ProductsSoldService;
 
 @RestController
@@ -18,34 +16,21 @@ public class ProductsSoldController {
     private ProductsSoldService productsSoldService;
 
     @PostMapping
-    public ResponseEntity<?> productSoldCreate(@RequestBody @Valid ProductSoldDTO productSoldDTO, UriComponentsBuilder uriBuilder) {
-        try {
-            var dto = productsSoldService.createProductSold(productSoldDTO);
-            var uri = uriBuilder.path("/products-sold/{id}").buildAndExpand(dto.getId()).toUri();
-
-            return ResponseEntity.created(uri).body(dto);
-        } catch (ValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseProductSoldDTO productSoldCreate(@RequestBody @Valid ProductSoldDTO productSoldDTO) {
+        var dto = productsSoldService.createProductSold(productSoldDTO);
+        return new ResponseProductSoldDTO(dto.getFoods(), dto.getDrinks(),
+                dto.getSales());
     }
 
     @PutMapping
-    public ResponseEntity alterProducSold(@RequestBody @Valid AlterProductSoldDTO alterProductSoldDTO) {
-        try {
-            var dto = productsSoldService.alterProductSold(alterProductSoldDTO);
-            return ResponseEntity.ok(dto);
-        } catch (ValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public AlterProductSoldDTO alterProducSold(@RequestBody @Valid AlterProductSoldDTO alterProductSoldDTO) {
+        var dto = productsSoldService.alterProductSold(alterProductSoldDTO);
+        return new AlterProductSoldDTO(dto.getId(), dto.getFoods(), dto.getDrinks(),
+                dto.getSales());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteProductSold(@PathVariable Long id) {
-        try {
-            productsSoldService.deleteProductSold(id);
-            return ResponseEntity.noContent().build();
-        } catch (ValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public void deleteProductSold(@PathVariable Long id) {
+        productsSoldService.deleteProductSold(id);
     }
 }
