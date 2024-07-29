@@ -12,6 +12,9 @@ import store.store_api.model.Users;
 import store.store_api.repository.AddresRepository;
 import store.store_api.repository.UsersRepository;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class UsersService {
 
@@ -23,6 +26,13 @@ public class UsersService {
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    public List<ListUserDTO> listAllUsers() {
+        List<Users> usersList = usersRepository.findAll();
+        return usersList.stream()
+                .map(ListUserDTO::new)
+                .collect(Collectors.toList());
+    }
 
     public Users createUser(UserCreateDTO userCreateDTO) {
         var addressDTO = userCreateDTO.addres();
@@ -57,6 +67,13 @@ public class UsersService {
             throw new ValidationException("User with ID " + id + " does not exist.");
         }
         var user = usersRepository.getReferenceById(id);
+        Addres addres = user.getAddres();
+
+        if (addres != null) {
+            addres.getCity();
+        }
+
         return new ListUserDTO(user);
     }
+
 }

@@ -11,6 +11,9 @@ import store.store_api.model.Stores;
 import store.store_api.repository.AddresRepository;
 import store.store_api.repository.StoresRepository;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class StoreService {
 
@@ -19,6 +22,13 @@ public class StoreService {
 
     @Autowired
     private AddresRepository addresRepository;
+
+    public List<ListStoreDTO> listAllStores() {
+        List<Stores> storesList = storesRepository.findAll();
+        return storesList.stream()
+                .map(ListStoreDTO::new)
+                .collect(Collectors.toList());
+    }
 
     public Stores createStore(StoreCreateDTO storeCreateDTO) {
         var addressDTO = storeCreateDTO.addres();
@@ -52,6 +62,13 @@ public class StoreService {
             throw new ValidacaoExcpetion("Store with ID " + id + " does not exist.");
         }
         var store = storesRepository.getReferenceById(id);
+        Addres addres = store.getAddres();
+
+        if (addres != null) {
+            addres.getCity();
+        }
+
         return new ListStoreDTO(store);
     }
+
 }

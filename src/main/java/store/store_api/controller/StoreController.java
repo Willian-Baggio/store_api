@@ -10,6 +10,8 @@ import store.store_api.dto.stores.ResponseStoreDTO;
 import store.store_api.dto.stores.StoreCreateDTO;
 import store.store_api.service.StoreService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("store")
 public class StoreController {
@@ -19,8 +21,12 @@ public class StoreController {
 
     @GetMapping("/{id}")
     public ListStoreDTO listStore(@PathVariable Long id) {
-        var stores = storeService.listStore(id);
-        return stores;
+        return storeService.listStore(id);
+    }
+
+    @GetMapping
+    public List<ListStoreDTO> listAllStores() {
+        return storeService.listAllStores();
     }
 
     @PostMapping

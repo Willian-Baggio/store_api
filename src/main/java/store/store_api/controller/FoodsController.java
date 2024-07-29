@@ -5,8 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import store.store_api.dto.foods.AlterFoodsDTO;
 import store.store_api.dto.foods.FoodsDTO;
+import store.store_api.dto.foods.ListFoodsDTO;
 import store.store_api.dto.foods.ResponseFoodsDTO;
 import store.store_api.service.FoodService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("foods")
@@ -14,6 +17,16 @@ public class FoodsController {
 
     @Autowired
     private FoodService foodService;
+
+    @GetMapping("/{id}")
+    public ListFoodsDTO listFoods(@PathVariable Long id) {
+        return foodService.listFood(id);
+    }
+
+    @GetMapping
+    public List<ListFoodsDTO> listAllFoods() {
+        return foodService.listAllFoods();
+    }
 
     @PostMapping
     public ResponseFoodsDTO foodsRegister(@RequestBody @Valid FoodsDTO foodsDTO) {

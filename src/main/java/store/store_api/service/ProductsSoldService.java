@@ -3,11 +3,17 @@ package store.store_api.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import store.store_api.dto.productsSold.AlterProductSoldDTO;
+import store.store_api.dto.productsSold.ListProductSoldDTO;
 import store.store_api.dto.productsSold.ProductSoldDTO;
 import store.store_api.exception.ValidacaoExcpetion;
 import store.store_api.model.ProductsSold;
+import store.store_api.repository.DrinksRepository;
+import store.store_api.repository.FoodsRepository;
 import store.store_api.repository.ProductsSoldRepository;
 import store.store_api.repository.SalesRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductsSoldService {
@@ -16,11 +22,32 @@ public class ProductsSoldService {
     private ProductsSoldRepository productsSoldRepository;
 
     @Autowired
+    private DrinksRepository drinksRepository;
+
+    @Autowired
+    private FoodsRepository foodsRepository;
+
+    @Autowired
     private SalesRepository salesRepository;
 
+    public List<ListProductSoldDTO> listAllProductsSold() {
+        List<ProductsSold> productsSoldList = productsSoldRepository.findAll();
+        return productsSoldList.stream()
+                .map(ListProductSoldDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    public ListProductSoldDTO listProductSale(Long id) {
+        var productsSold = productsSoldRepository.getReferenceById(id);
+        return new ListProductSoldDTO(productsSold);
+    }
+
     public ProductsSold createProductSold(ProductSoldDTO productSoldDTO) {
-        var productsSold = new ProductsSold(productSoldDTO.foods(), productSoldDTO.drinks(),
-                productSoldDTO.sales());
+        var foods = foodsRepository.getReferenceById(productSoldDTO.foodsId());
+        var drinks = drinksRepository.getReferenceById(productSoldDTO.drinksId());
+        var sales = salesRepository.getReferenceById(productSoldDTO.salesId());
+
+        var productsSold = new ProductsSold(foods, drinks, sales);
         return productsSoldRepository.save(productsSold);
     }
 
@@ -28,13 +55,15 @@ public class ProductsSoldService {
         if (!productsSoldRepository.existsById(alterProductSoldDTO.id())) {
             throw new ValidacaoExcpetion("Product sold with ID " + alterProductSoldDTO.id() + " does not exist.");
         }
-        var sales = salesRepository.getReferenceById(alterProductSoldDTO.foods().getId());
 
-        var products = new ProductsSold(alterProductSoldDTO.id(), alterProductSoldDTO.foods(),
-                alterProductSoldDTO.drinks(), sales);
-        products.update(alterProductSoldDTO);
+        var productsSold = productsSoldRepository.getReferenceById(alterProductSoldDTO.id());
+        var drinks = drinksRepository.getReferenceById(alterProductSoldDTO.drinksId());
+        var foods = foodsRepository.getReferenceById(alterProductSoldDTO.foodsId());
+        var sales = salesRepository.getReferenceById(alterProductSoldDTO.salesId());
 
-        return productsSoldRepository.save(products);
+        productsSold.update(alterProductSoldDTO, foods, drinks, sales);
+
+        return productsSoldRepository.save(productsSold);
     }
 
     public void deleteProductSold(Long id) {

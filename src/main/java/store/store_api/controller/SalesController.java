@@ -2,11 +2,15 @@ package store.store_api.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import store.store_api.dto.sales.AlterSalesDTO;
+import store.store_api.dto.sales.ListSalesDTO;
 import store.store_api.dto.sales.ResponseSaleDTO;
 import store.store_api.dto.sales.SalesDTO;
 import store.store_api.service.SalesService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("sales")
@@ -14,6 +18,16 @@ public class SalesController {
 
     @Autowired
     private SalesService salesService;
+
+    @GetMapping("/{id}")
+    public ListSalesDTO listSales(@PathVariable Long id) {
+        return salesService.listSale(id);
+    }
+
+    @GetMapping
+    public List<ListSalesDTO> listAllSales() {
+        return salesService.listAllSales();
+    }
 
     @PostMapping
     public ResponseSaleDTO salesRegister(@RequestBody @Valid SalesDTO salesDTO) {

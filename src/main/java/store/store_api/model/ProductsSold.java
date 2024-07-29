@@ -5,10 +5,16 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import store.store_api.dto.drinks.DrinksDTO;
+import store.store_api.dto.drinks.ListDrinksDTO;
+import store.store_api.dto.foods.FoodsDTO;
+import store.store_api.dto.foods.ListFoodsDTO;
 import store.store_api.dto.productsSold.AlterProductSoldDTO;
+import store.store_api.dto.sales.ListSalesDTO;
+import store.store_api.dto.sales.SalesDTO;
 
-@Table(name = "product_sold")
-@Entity(name = "ProductSold")
+@Table(name = "products_sold")
+@Entity(name = "ProductsSold")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,15 +40,15 @@ public class ProductsSold {
         this.sales = sales;
     }
 
-    public void update(AlterProductSoldDTO alterProductSoldDTO) {
-        if (alterProductSoldDTO.foods() != null) {
-            this.foods = alterProductSoldDTO.foods();
+    public void update(AlterProductSoldDTO alterProductSoldDTO, Foods foods, Drinks drinks, Sales sales) {
+        if (foods != null) {
+            this.foods = foods;
         }
-        if (alterProductSoldDTO.drinks() != null) {
-            this.drinks = alterProductSoldDTO.drinks();
+        if (drinks != null) {
+            this.drinks = drinks;
         }
-        if (alterProductSoldDTO.sales() != null) {
-            this.sales = alterProductSoldDTO.sales();
+        if (sales != null) {
+            this.sales = sales;
         }
     }
 }

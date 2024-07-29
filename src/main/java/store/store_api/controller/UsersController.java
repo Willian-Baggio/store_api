@@ -1,15 +1,16 @@
 package store.store_api.controller;
 
 import jakarta.validation.Valid;
-import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import store.store_api.dto.addres.AlterAddresDTO;
 import store.store_api.dto.users.AlterUserDTO;
+import store.store_api.dto.users.ListUserDTO;
 import store.store_api.dto.users.ResponseUserDTO;
 import store.store_api.dto.users.UserCreateDTO;
 import store.store_api.service.UsersService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -19,13 +20,13 @@ public class UsersController {
     private UsersService usersService;
 
     @GetMapping("/{id}")
-    public ResponseEntity listUser(@PathVariable Long id) {
-        try {
-            var users = usersService.listUser(id);
-            return ResponseEntity.ok(users);
-        } catch (ValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ListUserDTO listUser(@PathVariable Long id) {
+        return usersService.listUser(id);
+    }
+
+    @GetMapping
+    public List<ListUserDTO> listAllUsers() {
+        return usersService.listAllUsers();
     }
 
     @PostMapping

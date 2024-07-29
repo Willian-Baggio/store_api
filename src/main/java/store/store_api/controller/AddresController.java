@@ -4,9 +4,11 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import store.store_api.dto.addres.AddresDataDTO;
-import store.store_api.dto.addres.AlterAddresDTO;
+import store.store_api.dto.addres.ListAddresDTO;
 import store.store_api.dto.addres.ResponseAddresDTO;
 import store.store_api.service.AddresService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("addres")
@@ -15,18 +17,22 @@ public class AddresController {
     @Autowired
     private AddresService addresService;
 
+    @GetMapping("/{id}")
+    public ListAddresDTO listAddresDTO(@PathVariable Long id) {
+        return  addresService.listAddres(id);
+    }
+
+    @GetMapping
+    public List<ListAddresDTO> listAllAddres() {
+        return addresService.listAllAddres();
+    }
+
     @PostMapping
     public ResponseAddresDTO addresRegister(@RequestBody @Valid AddresDataDTO data) {
         var dto = addresService.addresRegister(data);
         return new ResponseAddresDTO(dto.getStreet(), dto.getNeighborhood(),
                 dto.getZipCode(), dto.getNumber(), dto.getComplement(),
                 dto.getCity(), dto.getUf());
-    }
-
-    @PutMapping
-    public AlterAddresDTO alterAddres(@RequestBody @Valid AlterAddresDTO alterAddresDTO) {
-        var dto = addresService.alterAddres(alterAddresDTO);
-        return new AlterAddresDTO(dto);
     }
 
     @DeleteMapping("/{id}")

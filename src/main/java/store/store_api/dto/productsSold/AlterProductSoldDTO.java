@@ -9,13 +9,11 @@ import store.store_api.model.Sales;
 public record AlterProductSoldDTO(
         @NotNull
         Long id,
-        Foods foods,
-        Drinks drinks,
+
+        Long foodsId,
+        Long drinksId,
+
         @NotNull
-        Sales sales
+        Long salesId
 ) {
-    public AlterProductSoldDTO(ProductsSold productsSold) {
-        this(productsSold.getId(), productsSold.getFoods(), productsSold.getDrinks(),
-                productsSold.getSales());
-    }
 }

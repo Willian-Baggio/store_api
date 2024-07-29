@@ -5,11 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import store.store_api.dto.drinks.AlterDrinksDTO;
 import store.store_api.dto.drinks.DrinksDTO;
+import store.store_api.dto.drinks.ListDrinksDTO;
 import store.store_api.model.Drinks;
 import store.store_api.repository.DrinksRepository;
 import store.store_api.validations.drinks.ValidationDrink;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DrinkService {
@@ -19,6 +21,18 @@ public class DrinkService {
 
     @Autowired
     private List<ValidationDrink> validationDrink;
+
+    public List<ListDrinksDTO> listAllDrinks() {
+        List<Drinks> drinksList = drinksRepository.findAll();
+        return drinksList.stream()
+                .map(ListDrinksDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    public ListDrinksDTO listDrink(Long id) {
+        var drinks = drinksRepository.getReferenceById(id);
+        return new ListDrinksDTO(drinks);
+    }
 
     public Drinks createDrinks(DrinksDTO drinksDTO) {
         var drinks = new Drinks(drinksDTO.drinkName(), drinksDTO.quantity(),
