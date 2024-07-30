@@ -31,7 +31,7 @@ public class ProductsSoldController {
     @PostMapping
     public ResponseProductSoldDTO productSoldCreate(@RequestBody @Valid ProductSoldDTO productSoldDTO) {
         var dto = productsSoldService.createProductSold(productSoldDTO);
-        return new ResponseProductSoldDTO(dto.getFoods(), dto.getDrinks(),
+        return new ResponseProductSoldDTO(dto.getId() ,dto.getFoods(), dto.getDrinks(),
                 dto.getSales());
     }
 

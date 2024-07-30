@@ -11,7 +11,7 @@ public class MongoDBDataSourceConfig{
 
     @Bean
     public MongoDatabaseFactory mongoConfigure() {
-        return new SimpleMongoClientDatabaseFactory("mongodb://username:password@localhost:27017/store_api");
+        return new SimpleMongoClientDatabaseFactory("mongodb://localhost:27017/store_api");
     }
 
     @Bean
