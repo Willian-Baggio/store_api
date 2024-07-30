@@ -18,7 +18,7 @@ public class AddresController {
     private AddresService addresService;
 
     @GetMapping("/{id}")
-    public ListAddresDTO listAddresDTO(@PathVariable Long id) {
+    public ListAddresDTO listAddresDTO(@PathVariable String id) {
         return  addresService.listAddres(id);
     }
 
@@ -36,7 +36,7 @@ public class AddresController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteAddres(@PathVariable Long id) {
+    public void deleteAddres(@PathVariable String id) {
         addresService.deleteAddres(id);
     }
 }

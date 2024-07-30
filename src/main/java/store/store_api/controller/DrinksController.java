@@ -19,7 +19,7 @@ public class DrinksController {
     private DrinkService drinkService;
 
     @GetMapping("/{id}")
-    public ListDrinksDTO listDrinks(@PathVariable Long id) {
+    public ListDrinksDTO listDrinks(@PathVariable String id) {
         return drinkService.listDrink(id);
     }
 
@@ -44,7 +44,7 @@ public class DrinksController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteDrink(@PathVariable Long id) {
+    public void deleteDrink(@PathVariable String id) {
         drinkService.removeDrink(id);
     }
 }

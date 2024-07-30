@@ -19,7 +19,7 @@ public class ProductsSoldController {
     private ProductsSoldService productsSoldService;
 
     @GetMapping("/{id}")
-    public ListProductSoldDTO listProductSale(@PathVariable Long id) {
+    public ListProductSoldDTO listProductSale(@PathVariable String id) {
         return productsSoldService.listProductSale(id);
     }
 
@@ -31,19 +31,19 @@ public class ProductsSoldController {
     @PostMapping
     public ResponseProductSoldDTO productSoldCreate(@RequestBody @Valid ProductSoldDTO productSoldDTO) {
         var dto = productsSoldService.createProductSold(productSoldDTO);
-        return new ResponseProductSoldDTO(dto.getFoods().getId(), dto.getDrinks().getId(),
-                dto.getSales().getId());
+        return new ResponseProductSoldDTO(dto.getFoods(), dto.getDrinks(),
+                dto.getSales());
     }
 
     @PutMapping
     public AlterProductSoldDTO alterProducSold(@RequestBody @Valid AlterProductSoldDTO alterProductSoldDTO) {
         var dto = productsSoldService.alterProductSold(alterProductSoldDTO);
-        return new AlterProductSoldDTO(dto.getId(), dto.getFoods().getId(), dto.getDrinks().getId(),
-                dto.getSales().getId());
+        return new AlterProductSoldDTO(dto.getId(), dto.getFoods(), dto.getDrinks(),
+                dto.getSales());
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProductSold(@PathVariable Long id) {
+    public void deleteProductSold(@PathVariable String id) {
         productsSoldService.deleteProductSold(id);
     }
 }

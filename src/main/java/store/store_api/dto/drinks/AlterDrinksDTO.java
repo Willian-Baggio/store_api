@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 public record AlterDrinksDTO(
         @NotNull
-        Long id,
+        String id,
         String drinkName,
         Integer quantity,
         BigDecimal price,

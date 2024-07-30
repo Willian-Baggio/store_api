@@ -5,7 +5,7 @@ import store.store_api.dto.addres.AlterAddresDTO;
 
 public record AlterUserDTO(
         @NotNull
-        Long id,
+        String id,
         String username,
         String email,
         String cellphone,

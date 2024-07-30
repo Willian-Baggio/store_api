@@ -5,7 +5,7 @@ import store.store_api.model.Foods;
 import java.math.BigDecimal;
 
 public record ListFoodsDTO(
-        Long id,
+        String id,
         String foodName,
         Integer quantity,
         BigDecimal price,

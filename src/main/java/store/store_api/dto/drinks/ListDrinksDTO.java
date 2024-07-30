@@ -5,7 +5,7 @@ import store.store_api.model.Drinks;
 import java.math.BigDecimal;
 
 public record ListDrinksDTO(
-        Long id,
+        String id,
         String drinkName,
         Integer quantity,
         BigDecimal price,

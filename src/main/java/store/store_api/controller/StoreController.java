@@ -20,7 +20,7 @@ public class StoreController {
     private StoreService storeService;
 
     @GetMapping("/{id}")
-    public ListStoreDTO listStore(@PathVariable Long id) {
+    public ListStoreDTO listStore(@PathVariable String id) {
         return storeService.listStore(id);
     }
 
@@ -42,7 +42,7 @@ public class StoreController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteStore(@PathVariable Long id) {
+    public void deleteStore(@PathVariable String id) {
         storeService.deleteStore(id);
     }
 }

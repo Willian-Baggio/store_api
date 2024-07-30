@@ -34,6 +34,18 @@ public class UsersService {
                 .collect(Collectors.toList());
     }
 
+    public ListUserDTO listUser(String id) {
+        var user = usersRepository.findById(id)
+                .orElseThrow(() -> new ValidationException("Users with ID " + id + " does not exist."));
+        Addres addres = user.getAddres();
+
+        if (addres != null) {
+            addres.getCity();
+        }
+
+        return new ListUserDTO(user);
+    }
+
     public Users createUser(UserCreateDTO userCreateDTO) {
         var addressDTO = userCreateDTO.addres();
         var addres = new Addres(addressDTO);
@@ -47,33 +59,16 @@ public class UsersService {
     }
 
     public Users alterUser(AlterUserDTO alterUserDTO) {
-        if (!usersRepository.existsById(alterUserDTO.id())) {
-            throw new ValidationException("User with ID " + alterUserDTO.id() + " does not exist.");
-        }
-        var users = usersRepository.getReferenceById(alterUserDTO.id());
+        var users = usersRepository.findById(alterUserDTO.id())
+                .orElseThrow(() -> new ValidationException("Users with ID " + alterUserDTO.id() + " does not exist."));
         users.update(alterUserDTO);
         return usersRepository.save(users);
     }
 
-    public void deleteUser(Long id) {
+    public void deleteUser(String id) {
         if (!usersRepository.existsById(id)) {
             throw new ValidationException("User with ID " + id + " does not exist.");
         }
         usersRepository.deleteById(id);
     }
-
-    public ListUserDTO listUser(Long id) {
-        if (!usersRepository.existsById(id)) {
-            throw new ValidationException("User with ID " + id + " does not exist.");
-        }
-        var user = usersRepository.getReferenceById(id);
-        Addres addres = user.getAddres();
-
-        if (addres != null) {
-            addres.getCity();
-        }
-
-        return new ListUserDTO(user);
-    }
-
 }

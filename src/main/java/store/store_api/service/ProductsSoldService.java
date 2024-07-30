@@ -1,5 +1,6 @@
 package store.store_api.service;
 
+import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import store.store_api.dto.productsSold.AlterProductSoldDTO;
@@ -37,17 +38,24 @@ public class ProductsSoldService {
                 .collect(Collectors.toList());
     }
 
-    public ListProductSoldDTO listProductSale(Long id) {
-        var productsSold = productsSoldRepository.getReferenceById(id);
+    public ListProductSoldDTO listProductSale(String id) {
+        var productsSold = productsSoldRepository.findById(id)
+                .orElseThrow(() -> new ValidationException("Product Sold with ID " + id + " does not exist."));
         return new ListProductSoldDTO(productsSold);
     }
 
     public ProductsSold createProductSold(ProductSoldDTO productSoldDTO) {
-        var foods = foodsRepository.getReferenceById(productSoldDTO.foodsId());
-        var drinks = drinksRepository.getReferenceById(productSoldDTO.drinksId());
-        var sales = salesRepository.getReferenceById(productSoldDTO.salesId());
+        var foods = foodsRepository.findById(productSoldDTO.foodsId())
+                .orElseThrow(() -> new ValidationException("Product sold food with ID "
+                        + productSoldDTO.foodsId() + " does not exist."));
+        var drinks = drinksRepository.findById(productSoldDTO.drinksId())
+                .orElseThrow(() -> new ValidationException("Product sold drinks with ID "
+                        + productSoldDTO.drinksId() + " does not exist."));
+        var sales = salesRepository.findById(productSoldDTO.salesId())
+                .orElseThrow(() -> new ValidationException("Sale with ID "
+                        + productSoldDTO.salesId() + " does not exist."));
 
-        var productsSold = new ProductsSold(foods, drinks, sales);
+        var productsSold = new ProductsSold(foods.getId(), drinks.getId(), sales.getId());
         return productsSoldRepository.save(productsSold);
     }
 
@@ -56,21 +64,24 @@ public class ProductsSoldService {
             throw new ValidacaoExcpetion("Product sold with ID " + alterProductSoldDTO.id() + " does not exist.");
         }
 
-        var productsSold = productsSoldRepository.getReferenceById(alterProductSoldDTO.id());
-        var drinks = drinksRepository.getReferenceById(alterProductSoldDTO.drinksId());
-        var foods = foodsRepository.getReferenceById(alterProductSoldDTO.foodsId());
-        var sales = salesRepository.getReferenceById(alterProductSoldDTO.salesId());
+        var productsSold = productsSoldRepository.findById(alterProductSoldDTO.id())
+                .orElseThrow();
+        var drinks = drinksRepository.findById(alterProductSoldDTO.drinksId())
+                .orElseThrow();
+        var foods = foodsRepository.findById(alterProductSoldDTO.foodsId())
+                .orElseThrow();
+        var sales = salesRepository.findById(alterProductSoldDTO.salesId())
+                .orElseThrow();
 
-        productsSold.update(alterProductSoldDTO, foods, drinks, sales);
+        productsSold.update(alterProductSoldDTO, foods.getId(), drinks.getId(), sales.getId());
 
         return productsSoldRepository.save(productsSold);
     }
 
-    public void deleteProductSold(Long id) {
+    public void deleteProductSold(String id) {
         if (!productsSoldRepository.existsById(id)) {
             throw new ValidacaoExcpetion("Product sold with ID " + id + " does not exist.");
         }
         productsSoldRepository.deleteById(id);
     }
-
 }

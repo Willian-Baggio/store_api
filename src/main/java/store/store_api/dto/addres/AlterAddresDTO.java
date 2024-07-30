@@ -5,7 +5,7 @@ import store.store_api.model.Addres;
 
 public record AlterAddresDTO(
         @NotBlank
-        Long id,
+        String id,
         String street,
         String neighborhood,
         String zipCode,

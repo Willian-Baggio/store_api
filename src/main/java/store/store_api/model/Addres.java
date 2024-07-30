@@ -1,24 +1,21 @@
 package store.store_api.model;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import store.store_api.dto.addres.AddresDataDTO;
 import store.store_api.dto.addres.AlterAddresDTO;
 
-@Table(name = "addres")
-@Entity(name = "Addres")
+@Document(collection = "addres")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id")
 public class Addres {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     private String street;
     private String neighborhood;

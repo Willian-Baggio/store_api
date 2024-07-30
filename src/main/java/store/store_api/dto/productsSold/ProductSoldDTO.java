@@ -3,10 +3,10 @@ package store.store_api.dto.productsSold;
 import jakarta.validation.constraints.NotNull;
 
 public record ProductSoldDTO(
-        Long foodsId,
-        Long drinksId,
+        String foodsId,
+        String drinksId,
 
         @NotNull
-        Long salesId
+        String salesId
 ) {
 }

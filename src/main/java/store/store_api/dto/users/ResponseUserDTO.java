@@ -3,7 +3,7 @@ package store.store_api.dto.users;
 import java.time.LocalDateTime;
 
 public record ResponseUserDTO(
-        Long id,
+        String id,
         String username,
         String email,
         String cellphone,

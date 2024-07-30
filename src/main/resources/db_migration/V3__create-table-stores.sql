@@ -1,5 +1,0 @@
-CREATE TABLE stores (
-  id INTEGER PRIMARY KEY AUTO_INCREMENT,
-  store_name VARCHAR(50),
-  addres_id INTEGER
-);

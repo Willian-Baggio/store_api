@@ -20,7 +20,7 @@ public class UsersController {
     private UsersService usersService;
 
     @GetMapping("/{id}")
-    public ListUserDTO listUser(@PathVariable Long id) {
+    public ListUserDTO listUser(@PathVariable String id) {
         return usersService.listUser(id);
     }
 
@@ -44,7 +44,7 @@ public class UsersController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
+    public void deleteUser(@PathVariable String id) {
         usersService.deleteUser(id);
     }
 }

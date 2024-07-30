@@ -29,8 +29,9 @@ public class DrinkService {
                 .collect(Collectors.toList());
     }
 
-    public ListDrinksDTO listDrink(Long id) {
-        var drinks = drinksRepository.getReferenceById(id);
+    public ListDrinksDTO listDrink(String id) {
+        var drinks = drinksRepository.findById(id)
+                .orElseThrow(() -> new ValidationException("Addres with ID " + id + " does not exist."));
         return new ListDrinksDTO(drinks);
     }
 
@@ -45,12 +46,13 @@ public class DrinkService {
             throw new ValidationException("Drink with ID " + alterDrinksDTO.id() + " does not exist.");
         }
 
-        var drink = drinksRepository.getReferenceById(alterDrinksDTO.id());
+        var drink = drinksRepository.findById(alterDrinksDTO.id())
+                .orElseThrow(() -> new ValidationException("Drink with ID " + alterDrinksDTO.id() + " does not exist."));
         drink.update(alterDrinksDTO);
         return drinksRepository.save(drink);
     }
 
-    public void removeDrink(Long id){
+    public void removeDrink(String id){
         if (!drinksRepository.existsById(id)) {
             throw new ValidationException("Drink with ID " + id + " does not exist.");
         }

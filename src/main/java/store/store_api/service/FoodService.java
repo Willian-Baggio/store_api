@@ -1,5 +1,6 @@
 package store.store_api.service;
 
+import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import store.store_api.dto.foods.AlterFoodsDTO;
@@ -25,6 +26,12 @@ public class FoodService {
                 .collect(Collectors.toList());
     }
 
+    public ListFoodsDTO listFood(String id) {
+        var foods = foodsRepository.findById(id)
+                .orElseThrow(() -> new ValidationException("Addres with ID " + id + " does not exist."));
+        return new ListFoodsDTO(foods);
+    }
+
     public Foods createFood(FoodsDTO foodsDTO) {
         var foods = new Foods(foodsDTO.foodName(), foodsDTO.quantity(), foodsDTO.price(),
                 foodsDTO.description());
@@ -32,29 +39,16 @@ public class FoodService {
     }
 
     public Foods alterFood(AlterFoodsDTO alterFoodsDTO) {
-        if (!foodsRepository.existsById(alterFoodsDTO.id())) {
-            throw new ValidacaoExcpetion("Food with ID " + alterFoodsDTO.id() + " does not exist.");
-        }
-
-        var foods = foodsRepository.getReferenceById(alterFoodsDTO.id());
+        var foods = foodsRepository.findById(alterFoodsDTO.id())
+                .orElseThrow(() -> new ValidationException("Addres with ID " + alterFoodsDTO.id() + " does not exist."));;
         foods.update(alterFoodsDTO);
         return foodsRepository.save(foods);
     }
 
-    public void deleteFood(Long id) {
+    public void deleteFood(String id) {
         if (!foodsRepository.existsById(id)) {
             throw new ValidacaoExcpetion("Food with ID " + id + " does not exist.");
         }
         foodsRepository.deleteById(id);
     }
-
-    public ListFoodsDTO listFood(Long id) {
-        if (!foodsRepository.existsById(id)) {
-            throw new ValidacaoExcpetion("Food with ID " + id + " does not exist.");
-        }
-
-        var foods = foodsRepository.getReferenceById(id);
-        return new ListFoodsDTO(foods);
-    }
-
 }

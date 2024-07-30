@@ -1,11 +1,11 @@
 package store.store_api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import store.store_api.dto.users.AlterUserDTO;
@@ -14,17 +14,14 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
-@Table(name = "users")
-@Entity(name = "Users")
+@Document(collection = "users")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id")
 public class Users implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     private String login;
     private String username;
@@ -37,7 +34,6 @@ public class Users implements UserDetails {
     private String cpf;
     private LocalDateTime registrationDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     private Addres addres;
 
     public Users(Users users) {

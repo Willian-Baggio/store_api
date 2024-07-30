@@ -1,5 +1,6 @@
 package store.store_api.service;
 
+import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import store.store_api.dto.sales.AlterSalesDTO;
@@ -33,39 +34,37 @@ public class SalesService {
                 .collect(Collectors.toList());
     }
 
-    public Sales createSales(SalesDTO salesDTO) {
-        var stores = storesRepository.findById(salesDTO.storeId()).get();
-        var users = usersRepository.findById(salesDTO.userId()).get();
+    public ListSalesDTO listSale(String id) {
+        var sales = salesRepository.findById(id)
+                .orElseThrow(() -> new ValidationException("Addres with ID " + id + " does not exist."));
+        return new ListSalesDTO(sales);
+    }
 
-        var sales = new Sales(stores, users,
+    public Sales createSales(SalesDTO salesDTO) {
+        var stores = storesRepository.findById(salesDTO.storeId())
+                .orElseThrow();
+        var users = usersRepository.findById(salesDTO.userId())
+                .orElseThrow();
+
+        var sales = new Sales(stores.getId(), users.getId(),
                 salesDTO.quantitySold(), salesDTO.totalPrice(), salesDTO.paymentMethood());
 
         return salesRepository.save(sales);
     }
 
     public Sales alterSales(AlterSalesDTO alterSalesDTO) {
-        if (!salesRepository.existsById(alterSalesDTO.id())) {
-            throw new ValidacaoExcpetion("Sales with ID " + alterSalesDTO.id() + " does not exist.");
-        }
-        var sales = salesRepository.getReferenceById(alterSalesDTO.id());
+        var sales = salesRepository.findById(alterSalesDTO.id())
+                .orElseThrow(() -> new ValidationException("Sale with ID " + alterSalesDTO.id() + " does not exist."));
         sales.update(alterSalesDTO);
         return salesRepository.save(sales);
     }
 
-    public void deleteSales(Long id) {
+    public void deleteSales(String id) {
         if (!salesRepository.existsById(id)) {
             throw new ValidacaoExcpetion("Sales with ID " + id + " does not exist.");
         }
         salesRepository.deleteById(id);
     }
 
-    public ListSalesDTO listSale(Long id) {
-        if (!salesRepository.existsById(id)) {
-            throw new ValidacaoExcpetion("Sales with ID " + id + " does not exist.");
-        }
-
-        var sales = salesRepository.getReferenceById(id);
-        return new ListSalesDTO(sales);
-    }
 
 }

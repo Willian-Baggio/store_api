@@ -5,7 +5,7 @@ import store.store_api.model.Addres;
 import store.store_api.model.Stores;
 
 public record ListStoreDTO(
-        Long id,
+        String id,
         String storeName,
         ListAddresDTO addres
         ) {

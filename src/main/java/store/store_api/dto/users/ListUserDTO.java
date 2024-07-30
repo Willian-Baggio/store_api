@@ -4,7 +4,7 @@ import store.store_api.dto.addres.ListAddresDTO;
 import store.store_api.model.Users;
 
 public record ListUserDTO(
-        Long id,
+        String id,
         String username,
         String email,
         String cellphone,

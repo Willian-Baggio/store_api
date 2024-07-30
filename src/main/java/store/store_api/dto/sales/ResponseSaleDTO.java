@@ -4,9 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record ResponseSaleDTO(
-        Long id,
-        Long storesId,
-        Long usersId,
+        String id,
+        String storesId,
+        String usersId,
         LocalDateTime saleDate,
         Integer quantitySold,
         BigDecimal totalPrice,

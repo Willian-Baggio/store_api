@@ -8,12 +8,12 @@ import store.store_api.model.Sales;
 
 public record AlterProductSoldDTO(
         @NotNull
-        Long id,
+        String id,
 
-        Long foodsId,
-        Long drinksId,
+        String foodsId,
+        String drinksId,
 
         @NotNull
-        Long salesId
+        String salesId
 ) {
 }

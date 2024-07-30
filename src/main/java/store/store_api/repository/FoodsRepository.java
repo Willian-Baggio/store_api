@@ -1,7 +1,7 @@
 package store.store_api.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import store.store_api.model.Foods;
 
-public interface FoodsRepository extends JpaRepository<Foods, Long> {
+public interface FoodsRepository extends MongoRepository<Foods, String> {
 }

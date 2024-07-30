@@ -19,7 +19,7 @@ public class FoodsController {
     private FoodService foodService;
 
     @GetMapping("/{id}")
-    public ListFoodsDTO listFoods(@PathVariable Long id) {
+    public ListFoodsDTO listFoods(@PathVariable String id) {
         return foodService.listFood(id);
     }
 
@@ -43,7 +43,7 @@ public class FoodsController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteFood(@PathVariable Long id) {
+    public void deleteFood(@PathVariable String id) {
         foodService.deleteFood(id);
     }
 }

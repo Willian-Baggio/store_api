@@ -20,7 +20,7 @@ public class SalesController {
     private SalesService salesService;
 
     @GetMapping("/{id}")
-    public ListSalesDTO listSales(@PathVariable Long id) {
+    public ListSalesDTO listSales(@PathVariable String id) {
         return salesService.listSale(id);
     }
 
@@ -32,7 +32,7 @@ public class SalesController {
     @PostMapping
     public ResponseSaleDTO salesRegister(@RequestBody @Valid SalesDTO salesDTO) {
         var dto = salesService.createSales(salesDTO);
-        return new ResponseSaleDTO(dto.getId(), dto.getStores().getId(), dto.getUsers().getId(),
+        return new ResponseSaleDTO(dto.getId(), dto.getStores(), dto.getUsers(),
            dto.getSaleDate(), dto.getQuantitySold(), dto.getTotalPrice(),
            dto.getPaymentMethood());
     }
@@ -40,12 +40,12 @@ public class SalesController {
     @PutMapping
     public AlterSalesDTO alterSales(@RequestBody @Valid AlterSalesDTO alterSalesDTO) {
         var dto = salesService.alterSales(alterSalesDTO);
-        return new AlterSalesDTO(dto.getId(), dto.getStores().getId(), dto.getUsers().getId(),
+        return new AlterSalesDTO(dto.getId(), dto.getStores(), dto.getUsers(),
                 dto.getQuantitySold(), dto.getTotalPrice(), dto.getPaymentMethood());
     }
 
     @DeleteMapping("/{id}")
-    public void deleteSales(@PathVariable Long id) {
+    public void deleteSales(@PathVariable String id) {
         salesService.deleteSales(id);;
     }
 }

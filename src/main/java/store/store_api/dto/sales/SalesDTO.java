@@ -10,10 +10,10 @@ import java.time.LocalDateTime;
 
 public record SalesDTO(
         @NotNull
-        Long storeId,
+        String storeId,
 
         @NotNull
-        Long userId,
+        String userId,
 
         @NotNull
         Integer quantitySold,

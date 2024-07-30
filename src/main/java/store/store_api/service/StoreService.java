@@ -1,5 +1,6 @@
 package store.store_api.service;
 
+import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import store.store_api.dto.stores.AlterStoreDTO;
@@ -42,26 +43,22 @@ public class StoreService {
     }
 
     public Stores alterStore(AlterStoreDTO alterStoreDTO) {
-        if (!storesRepository.existsById(alterStoreDTO.id())) {
-            throw new ValidacaoExcpetion("Store with ID " + alterStoreDTO.id() + " does not exist.");
-        }
-        var stores = storesRepository.getReferenceById(alterStoreDTO.id());
+        var stores = storesRepository.findById(alterStoreDTO.id())
+                .orElseThrow(() -> new ValidationException("Store with ID " + alterStoreDTO.id() + " does not exist."));
         stores.update(alterStoreDTO);
         return storesRepository.save(stores);
     }
 
-    public void deleteStore(Long id) {
+    public void deleteStore(String id) {
         if (!storesRepository.existsById(id)) {
             throw new ValidacaoExcpetion("Store with ID " + id + " does not exist.");
         }
         storesRepository.deleteById(id);
     }
 
-    public ListStoreDTO listStore(Long id) {
-        if (!storesRepository.existsById(id)) {
-            throw new ValidacaoExcpetion("Store with ID " + id + " does not exist.");
-        }
-        var store = storesRepository.getReferenceById(id);
+    public ListStoreDTO listStore(String id) {
+        var store = storesRepository.findById(id)
+                .orElseThrow(() -> new ValidationException("Store with ID " + id + " does not exist."));
         Addres addres = store.getAddres();
 
         if (addres != null) {

@@ -24,11 +24,9 @@ public class AddresService {
                 .collect(Collectors.toList());
     }
 
-    public ListAddresDTO listAddres(Long id) {
-        if (!addresRepository.existsById(id)) {
-            throw new ValidationException("Addres with ID " + id + " does not exist.");
-        }
-        var addres = addresRepository.getReferenceById(id);
+    public ListAddresDTO listAddres(String id) {
+        var addres = addresRepository.findById(id)
+                .orElseThrow(() -> new ValidationException("Addres with ID " + id + " does not exist."));
         return new ListAddresDTO(addres);
     }
 
@@ -42,7 +40,7 @@ public class AddresService {
         return addresRepository.save(addres);
     }
 
-    public void deleteAddres(Long id) {
+    public void deleteAddres(String id) {
         if (!addresRepository.existsById(id)) {
             throw new ValidationException("Addres with ID " + id + " does not exist.");
         }

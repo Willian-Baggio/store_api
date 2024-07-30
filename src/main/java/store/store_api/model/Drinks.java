@@ -1,25 +1,22 @@
 package store.store_api.model;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import store.store_api.dto.drinks.AlterDrinksDTO;
 
 import java.math.BigDecimal;
 
-@Table(name = "drinks")
-@Entity(name = "Drinks")
+@Document(collection = "drinks")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id")
 public class Drinks {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     private String drinkName;
     private Integer quantity;

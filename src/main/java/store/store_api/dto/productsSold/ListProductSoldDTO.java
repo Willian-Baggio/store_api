@@ -3,13 +3,13 @@ package store.store_api.dto.productsSold;
 import store.store_api.model.ProductsSold;
 
 public record ListProductSoldDTO(
-        Long id,
-        Long foodsId,
-        Long drinksId,
-        Long salesId
+        String id,
+        String foodsId,
+        String drinksId,
+        String salesId
 ) {
         public ListProductSoldDTO(ProductsSold productsSold) {
-                this(productsSold.getId(), productsSold.getFoods().getId(), productsSold.getDrinks().getId(),
-                        productsSold.getSales().getId());
+                this(productsSold.getId(), productsSold.getFoods(), productsSold.getDrinks(),
+                        productsSold.getSales());
         }
 }

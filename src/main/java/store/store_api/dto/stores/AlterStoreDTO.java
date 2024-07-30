@@ -5,7 +5,7 @@ import store.store_api.dto.addres.AlterAddresDTO;
 
 public record AlterStoreDTO(
         @NotNull
-        Long id,
+        String id,
         String storeName,
         AlterAddresDTO addres
         ) {

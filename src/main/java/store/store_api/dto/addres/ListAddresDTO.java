@@ -2,8 +2,10 @@ package store.store_api.dto.addres;
 
 import store.store_api.model.Addres;
 
+import java.util.Optional;
+
 public record ListAddresDTO(
-        Long id,
+        String id,
         String street,
         String neighborhood,
         String zipCode,
