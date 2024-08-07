@@ -23,13 +23,6 @@ public class Foods {
     private BigDecimal price;
     private String description;
 
-    public Foods(String foodName, Integer quantity, BigDecimal price, String description) {
-        this.foodName = foodName;
-        this.quantity = quantity;
-        this.price = price;
-        this.description = description;
-    }
-
     public void update(AlterFoodsDTO alterFoodsDTO) {
         if (alterFoodsDTO.foodName() != null) {
             this.foodName = alterFoodsDTO.foodName();

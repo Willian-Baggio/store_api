@@ -1,9 +1,10 @@
 package store.store_api.controller;
 
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import store.store_api.dto.addres.AlterAddresDTO;
+import store.store_api.dto.address.AlterAddressDTO;
 import store.store_api.dto.stores.AlterStoreDTO;
 import store.store_api.dto.stores.ListStoreDTO;
 import store.store_api.dto.stores.ResponseStoreDTO;
@@ -13,11 +14,11 @@ import store.store_api.service.StoreService;
 import java.util.List;
 
 @RestController
-@RequestMapping("store")
+@RequestMapping("/store")
+@AllArgsConstructor
 public class StoreController {
 
-    @Autowired
-    private StoreService storeService;
+    private final StoreService storeService;
 
     @GetMapping("/{id}")
     public ListStoreDTO listStore(@PathVariable String id) {
@@ -31,14 +32,12 @@ public class StoreController {
 
     @PostMapping
     public ResponseStoreDTO createStore(@RequestBody @Valid StoreCreateDTO storeCreateDTO) {
-        var dto = storeService.createStore(storeCreateDTO);
-        return new ResponseStoreDTO(dto.getId(), dto.getStoreName(), dto.getAddres());
+        return storeService.createStore(storeCreateDTO);
     }
 
     @PutMapping
     public AlterStoreDTO alterStore(@RequestBody @Valid AlterStoreDTO alterStoreDTO) {
-        var dto = storeService.alterStore(alterStoreDTO);
-        return new AlterStoreDTO(dto.getId(), dto.getStoreName(), new AlterAddresDTO(dto.getAddres()));
+        return storeService.alterStore(alterStoreDTO);
     }
 
     @DeleteMapping("/{id}")

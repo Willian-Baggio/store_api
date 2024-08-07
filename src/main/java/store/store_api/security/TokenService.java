@@ -3,6 +3,7 @@ package store.store_api.security;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import store.store_api.model.Users;
 
@@ -12,13 +13,12 @@ import java.time.ZoneOffset;
 
 @Service
 public class TokenService {
-    public String gerarToken(Users users) {
+    public String generateToken(UserDetails users) {
         try {
             var algoritmo = Algorithm.HMAC256("123456");
             return JWT.create()
                     .withIssuer("auth0")
-                    .withSubject(users.getLogin())
-                    .withClaim("id", users.getId())
+                    .withSubject(users.getUsername())
                     .withExpiresAt(dataExpiracao())
                     .sign(algoritmo);
         } catch (JWTCreationException exception){

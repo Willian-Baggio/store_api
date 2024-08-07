@@ -34,21 +34,9 @@ public class Users implements UserDetails {
     private String cpf;
     private LocalDateTime registrationDate;
 
-    private Addres addres;
+    private Address address;
 
-    public Users(Users users) {
-        this.id = users.getId();
-        this.login = users.getLogin();
-        this.username = users.getUsername();
-        this.password = users.getPassword();
-        this.email = users.getEmail();
-        this.cellphone = users.getCellphone();
-        this.cpf = users.getCpf();
-        this.registrationDate = LocalDateTime.now();
-        this.addres = users.getAddres();
-    }
-
-    public Users(String login, String username, String password, String email, String cellphone, String cpf, Addres addres) {
+    public Users(String login, String username, String password, String email, String cellphone, String cpf, Address addres) {
         this.login = login;
         this.username = username;
         this.password = password;
@@ -56,7 +44,7 @@ public class Users implements UserDetails {
         this.cellphone = cellphone;
         this.cpf = cpf;
         this.registrationDate = LocalDateTime.now();
-        this.addres = addres;
+        this.address = addres;
     }
 
     public void update(AlterUserDTO alterUserDTO) {
@@ -72,11 +60,8 @@ public class Users implements UserDetails {
         if (alterUserDTO.cpf() != null) {
             this.cpf = alterUserDTO.cpf();
         }
-        if (alterUserDTO.cpf() != null) {
-            this.cpf = alterUserDTO.cpf();
-        }
-        if (alterUserDTO.addres() != null) {
-            this.addres.update(alterUserDTO.addres());
+        if (alterUserDTO.address() != null) {
+            this.address.update(alterUserDTO.address());
         }
     }
 

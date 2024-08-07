@@ -1,6 +1,6 @@
-package store.store_api.dto.addres;
+package store.store_api.dto.address;
 
-public record ResponseAddresDTO(
+public record ResponseAddressDTO(
     String street,
     String neighborhood,
     String zipCode,

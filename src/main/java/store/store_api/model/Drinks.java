@@ -23,13 +23,6 @@ public class Drinks {
     private BigDecimal price;
     private String description;
 
-    public Drinks(String drinkName, Integer quantity, BigDecimal price, String description) {
-        this.drinkName = drinkName;
-        this.quantity = quantity;
-        this.price = price;
-        this.description = description;
-    }
-
     public void update(AlterDrinksDTO alterDrinksDTO) {
         if (alterDrinksDTO.drinkName() != null) {
             this.drinkName = alterDrinksDTO.drinkName();

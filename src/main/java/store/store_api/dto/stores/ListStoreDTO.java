@@ -1,15 +1,10 @@
 package store.store_api.dto.stores;
 
-import store.store_api.dto.addres.ListAddresDTO;
-import store.store_api.model.Addres;
-import store.store_api.model.Stores;
+import store.store_api.dto.address.ListAddressDTO;
 
 public record ListStoreDTO(
         String id,
         String storeName,
-        ListAddresDTO addres
+        ListAddressDTO address
         ) {
-        public ListStoreDTO(Stores stores) {
-                this(stores.getId(), stores.getStoreName(), new ListAddresDTO(stores.getAddres()));
-        }
 }

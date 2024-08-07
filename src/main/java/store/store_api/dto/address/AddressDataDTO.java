@@ -1,10 +1,10 @@
-package store.store_api.dto.addres;
+package store.store_api.dto.address;
 
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
-public record AddresDataDTO(
+public record AddressDataDTO(
     @NotBlank
     String street,
 

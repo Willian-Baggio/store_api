@@ -1,74 +1,76 @@
 package store.store_api.service;
 
 import jakarta.validation.ValidationException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import store.store_api.dto.users.AlterUserDTO;
 import store.store_api.dto.users.ListUserDTO;
+import store.store_api.dto.users.ResponseUserDTO;
 import store.store_api.dto.users.UserCreateDTO;
-import store.store_api.model.Addres;
+import store.store_api.mapper.AddressMapper;
+import store.store_api.mapper.UsersMaper;
+import store.store_api.model.Address;
 import store.store_api.model.Users;
-import store.store_api.repository.AddresRepository;
+import store.store_api.repository.AddressRepository;
 import store.store_api.repository.UsersRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class UsersService {
 
-    @Autowired
-    private UsersRepository usersRepository;
-
-    @Autowired
-    private AddresRepository addresRepository;
-
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final UsersRepository usersRepository;
+    private final AddressRepository addresRepository;
+    private final UsersMaper usersMaper = UsersMaper.INSTANCE;
+    private final AddressMapper addressMapper = AddressMapper.INSTANCE;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public List<ListUserDTO> listAllUsers() {
         List<Users> usersList = usersRepository.findAll();
         return usersList.stream()
-                .map(ListUserDTO::new)
+                .map(usersMaper::toListUserDTO)
                 .collect(Collectors.toList());
     }
 
     public ListUserDTO listUser(String id) {
-        var user = usersRepository.findById(id)
-                .orElseThrow(() -> new ValidationException("Users with ID " + id + " does not exist."));
-        Addres addres = user.getAddres();
+        var user = findUserById(id);
+        Address address = user.getAddress();
 
-        if (addres != null) {
-            addres.getCity();
+        if (address != null) {
+            address.getCity();
         }
 
-        return new ListUserDTO(user);
+        return usersMaper.toListUserDTO(user);
     }
 
-    public Users createUser(UserCreateDTO userCreateDTO) {
-        var addressDTO = userCreateDTO.addres();
-        var addres = new Addres(addressDTO);
-        addres = addresRepository.save(addres);
+    public ResponseUserDTO userRegister(UserCreateDTO userCreateDTO) {
+        var addressDTO = userCreateDTO.address();
+        var address = new Address(addressDTO);
+        address = addresRepository.save(address);
 
         var encryptedPassword = bCryptPasswordEncoder.encode(userCreateDTO.password());
         var users = new Users(userCreateDTO.login() ,userCreateDTO.username(), encryptedPassword, userCreateDTO.email(),
-                userCreateDTO.cellphone(), userCreateDTO.cpf(), addres);
+                userCreateDTO.cellphone(), userCreateDTO.cpf(), address);
         users = usersRepository.save(users);
-        return new Users(users);
+        return usersMaper.toResponseUserDTO(users);
     }
 
-    public Users alterUser(AlterUserDTO alterUserDTO) {
-        var users = usersRepository.findById(alterUserDTO.id())
-                .orElseThrow(() -> new ValidationException("Users with ID " + alterUserDTO.id() + " does not exist."));
+    public AlterUserDTO alterUser(AlterUserDTO alterUserDTO) {
+        var users = findUserById(alterUserDTO.id());
         users.update(alterUserDTO);
-        return usersRepository.save(users);
+        return usersMaper.toAlterUserDTO(users);
     }
 
     public void deleteUser(String id) {
-        if (!usersRepository.existsById(id)) {
-            throw new ValidationException("User with ID " + id + " does not exist.");
-        }
+        findUserById(id);
         usersRepository.deleteById(id);
+    }
+
+    public Users findUserById(String id) {
+        return usersRepository.findById(id)
+                .orElseThrow(() -> new ValidationException("Users with ID " + id + " does not exist."));
     }
 }

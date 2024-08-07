@@ -1,22 +1,22 @@
 package store.store_api.controller;
 
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import store.store_api.dto.foods.AlterFoodsDTO;
 import store.store_api.dto.foods.FoodsDTO;
 import store.store_api.dto.foods.ListFoodsDTO;
 import store.store_api.dto.foods.ResponseFoodsDTO;
-import store.store_api.service.FoodService;
+import store.store_api.service.FoodsService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("foods")
+@RequestMapping("/foods")
+@AllArgsConstructor
 public class FoodsController {
 
-    @Autowired
-    private FoodService foodService;
+    private final FoodsService foodService;
 
     @GetMapping("/{id}")
     public ListFoodsDTO listFoods(@PathVariable String id) {
@@ -30,16 +30,12 @@ public class FoodsController {
 
     @PostMapping
     public ResponseFoodsDTO foodsRegister(@RequestBody @Valid FoodsDTO foodsDTO) {
-        var dto = foodService.createFood(foodsDTO);
-        return new ResponseFoodsDTO(dto.getId() ,dto.getFoodName(),
-                dto.getQuantity(), dto.getPrice(), dto.getDescription());
+        return foodService.foodsRegister(foodsDTO);
     }
 
     @PutMapping
     public AlterFoodsDTO alterFood(@RequestBody @Valid AlterFoodsDTO alterFoodsDTO) {
-            var dto = foodService.alterFood(alterFoodsDTO);
-            return new AlterFoodsDTO(dto.getId(), dto.getFoodName(), dto.getQuantity(),
-                    dto.getPrice(), dto.getDescription());
+            return foodService.alterFood(alterFoodsDTO);
     }
 
     @DeleteMapping("/{id}")

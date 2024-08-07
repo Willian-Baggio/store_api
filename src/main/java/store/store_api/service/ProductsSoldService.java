@@ -1,35 +1,28 @@
 package store.store_api.service;
 
-import jakarta.validation.ValidationException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import store.store_api.dto.productsSold.AlterProductSoldDTO;
 import store.store_api.dto.productsSold.ListProductSoldDTO;
 import store.store_api.dto.productsSold.ProductSoldDTO;
-import store.store_api.exception.ValidacaoExcpetion;
+import store.store_api.dto.productsSold.ResponseProductSoldDTO;
 import store.store_api.model.ProductsSold;
-import store.store_api.repository.DrinksRepository;
-import store.store_api.repository.FoodsRepository;
 import store.store_api.repository.ProductsSoldRepository;
-import store.store_api.repository.SalesRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class ProductsSoldService {
 
-    @Autowired
-    private ProductsSoldRepository productsSoldRepository;
+    private final ProductsSoldRepository productsSoldRepository;
 
-    @Autowired
-    private DrinksRepository drinksRepository;
+    private final DrinksService drinksService;
 
-    @Autowired
-    private FoodsRepository foodsRepository;
+    private final FoodsService foodsService;
 
-    @Autowired
-    private SalesRepository salesRepository;
+    private final SalesService salesService;
 
     public List<ListProductSoldDTO> listAllProductsSold() {
         List<ProductsSold> productsSoldList = productsSoldRepository.findAll();
@@ -39,49 +32,41 @@ public class ProductsSoldService {
     }
 
     public ListProductSoldDTO listProductSale(String id) {
-        var productsSold = productsSoldRepository.findById(id)
-                .orElseThrow(() -> new ValidationException("Product Sold with ID " + id + " does not exist."));
+        var productsSold = findProductSoldById(id);
         return new ListProductSoldDTO(productsSold);
     }
 
-    public ProductsSold createProductSold(ProductSoldDTO productSoldDTO) {
-        var foods = foodsRepository.findById(productSoldDTO.foodsId())
-                .orElseThrow(() -> new ValidationException("Product sold food with ID "
-                        + productSoldDTO.foodsId() + " does not exist."));
-        var drinks = drinksRepository.findById(productSoldDTO.drinksId())
-                .orElseThrow(() -> new ValidationException("Product sold drinks with ID "
-                        + productSoldDTO.drinksId() + " does not exist."));
-        var sales = salesRepository.findById(productSoldDTO.salesId())
-                .orElseThrow(() -> new ValidationException("Sale with ID "
-                        + productSoldDTO.salesId() + " does not exist."));
+    public ResponseProductSoldDTO productSoldCreate(ProductSoldDTO productSoldDTO) {
+        var foods = foodsService.findFoodsById(productSoldDTO.foodsId());
+        var drinks = drinksService.findDrinkById(productSoldDTO.drinksId());
+        var sales = salesService.findSalesById(productSoldDTO.salesId());
 
         var productsSold = new ProductsSold(foods.getId(), drinks.getId(), sales.getId());
-        return productsSoldRepository.save(productsSold);
+        var saveProductsSold = productsSoldRepository.save(productsSold);
+        return new ResponseProductSoldDTO(saveProductsSold.getId(), saveProductsSold.getFoods(),
+                saveProductsSold.getDrinks(), saveProductsSold.getSales());
     }
 
-    public ProductsSold alterProductSold(AlterProductSoldDTO alterProductSoldDTO) {
-        if (!productsSoldRepository.existsById(alterProductSoldDTO.id())) {
-            throw new ValidacaoExcpetion("Product sold with ID " + alterProductSoldDTO.id() + " does not exist.");
-        }
-
-        var productsSold = productsSoldRepository.findById(alterProductSoldDTO.id())
-                .orElseThrow();
-        var drinks = drinksRepository.findById(alterProductSoldDTO.drinksId())
-                .orElseThrow();
-        var foods = foodsRepository.findById(alterProductSoldDTO.foodsId())
-                .orElseThrow();
-        var sales = salesRepository.findById(alterProductSoldDTO.salesId())
-                .orElseThrow();
+    public AlterProductSoldDTO alterProductSold(AlterProductSoldDTO alterProductSoldDTO) {
+        var productsSold = findProductSoldById(alterProductSoldDTO.id());
+        var drinks = drinksService.findDrinkById(alterProductSoldDTO.drinksId());
+        var foods = foodsService.findFoodsById(alterProductSoldDTO.foodsId());
+        var sales = salesService.findSalesById(alterProductSoldDTO.salesId());
 
         productsSold.update(alterProductSoldDTO, foods.getId(), drinks.getId(), sales.getId());
 
-        return productsSoldRepository.save(productsSold);
+        return new AlterProductSoldDTO(productsSold.getId(), productsSold.getFoods(),
+                productsSold.getDrinks(), productsSold.getSales());
     }
 
     public void deleteProductSold(String id) {
-        if (!productsSoldRepository.existsById(id)) {
-            throw new ValidacaoExcpetion("Product sold with ID " + id + " does not exist.");
-        }
+        findProductSoldById(id);
         productsSoldRepository.deleteById(id);
+    }
+
+    public ProductsSold findProductSoldById(String id) {
+        return productsSoldRepository.findById(id)
+                .orElseThrow(() -> new jakarta.validation.ValidationException("Product Sold with ID " +
+                        id + " does not exist."));
     }
 }

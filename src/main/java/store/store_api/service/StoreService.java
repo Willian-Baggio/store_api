@@ -1,71 +1,72 @@
 package store.store_api.service;
 
-import jakarta.validation.ValidationException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import store.store_api.dto.stores.AlterStoreDTO;
 import store.store_api.dto.stores.ListStoreDTO;
+import store.store_api.dto.stores.ResponseStoreDTO;
 import store.store_api.dto.stores.StoreCreateDTO;
-import store.store_api.exception.ValidacaoExcpetion;
-import store.store_api.model.Addres;
+import store.store_api.mapper.AddressMapper;
+import store.store_api.mapper.StoreMapper;
+import store.store_api.model.Address;
 import store.store_api.model.Stores;
-import store.store_api.repository.AddresRepository;
+import store.store_api.repository.AddressRepository;
 import store.store_api.repository.StoresRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class StoreService {
 
-    @Autowired
-    private StoresRepository storesRepository;
+    private final StoresRepository storesRepository;
+    private final StoreMapper storeMapper = StoreMapper.INSTANCE;
+    private final AddressMapper addressMapper = AddressMapper.INSTANCE;
+    private final AddressRepository addressRepository;
 
-    @Autowired
-    private AddresRepository addresRepository;
+    public ListStoreDTO listStore(String id) {
+        var store = findStoresById(id);
+        Address address = store.getAddress();
+
+        if (address != null) {
+            address.getCity();
+        }
+
+        return storeMapper.toListStoreDTO(store);
+    }
 
     public List<ListStoreDTO> listAllStores() {
         List<Stores> storesList = storesRepository.findAll();
         return storesList.stream()
-                .map(ListStoreDTO::new)
+                .map(storeMapper::toListStoreDTO)
                 .collect(Collectors.toList());
     }
 
-    public Stores createStore(StoreCreateDTO storeCreateDTO) {
+    public ResponseStoreDTO createStore(StoreCreateDTO storeCreateDTO) {
         var addressDTO = storeCreateDTO.addres();
-        var addres = new Addres(addressDTO.street(), addressDTO.neighborhood(),
-                addressDTO.zipCode(), addressDTO.number(), addressDTO.complement(),
-                addressDTO.city(), addressDTO.uf());
-        addres = addresRepository.save(addres);
+        var address = addressMapper.toAddressDataDTO(addressDTO);
+        address = addressRepository.save(address);
 
-        var stores = new Stores(storeCreateDTO.storeName(), addres);
-        return storesRepository.save(stores);
+        var stores = new Stores(storeCreateDTO.storeName(), address);
+        var saveStores = storesRepository.save(stores);
+        return storeMapper.toResponseStoreDTO(saveStores);
     }
 
-    public Stores alterStore(AlterStoreDTO alterStoreDTO) {
-        var stores = storesRepository.findById(alterStoreDTO.id())
-                .orElseThrow(() -> new ValidationException("Store with ID " + alterStoreDTO.id() + " does not exist."));
+    public AlterStoreDTO alterStore(AlterStoreDTO alterStoreDTO) {
+        var stores = findStoresById(alterStoreDTO.id());
         stores.update(alterStoreDTO);
-        return storesRepository.save(stores);
+        return storeMapper.toAlterStoreDTO(stores);
     }
 
     public void deleteStore(String id) {
-        if (!storesRepository.existsById(id)) {
-            throw new ValidacaoExcpetion("Store with ID " + id + " does not exist.");
-        }
+        findStoresById(id);
         storesRepository.deleteById(id);
     }
 
-    public ListStoreDTO listStore(String id) {
-        var store = storesRepository.findById(id)
-                .orElseThrow(() -> new ValidationException("Store with ID " + id + " does not exist."));
-        Addres addres = store.getAddres();
-
-        if (addres != null) {
-            addres.getCity();
-        }
-
-        return new ListStoreDTO(store);
+    public Stores findStoresById(String id) {
+        return storesRepository.findById(id)
+                .orElseThrow(() -> new jakarta.validation.ValidationException("Store with ID "
+                        + id + " does not exist."));
     }
-
 }

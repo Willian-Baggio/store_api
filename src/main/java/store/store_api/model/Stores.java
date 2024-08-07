@@ -16,19 +16,19 @@ public class Stores {
     @Id
     private String id;
     private String storeName;
-    private Addres addres;
+    private Address address;
 
-    public Stores(String storeName, Addres addres) {
+    public Stores(String storeName, Address address) {
         this.storeName = storeName;
-        this.addres = addres;
+        this.address = address;
     }
 
     public void update(AlterStoreDTO alterStoreDTO) {
         if (alterStoreDTO.storeName() != null) {
             this.storeName = alterStoreDTO.storeName();
         }
-        if (alterStoreDTO.addres() != null) {
-            this.addres.update(alterStoreDTO.addres());
+        if (alterStoreDTO.address() != null) {
+            this.address.update(alterStoreDTO.address());
         }
     }
 }

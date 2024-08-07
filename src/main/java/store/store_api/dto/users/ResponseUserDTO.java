@@ -1,5 +1,7 @@
 package store.store_api.dto.users;
 
+import store.store_api.model.Address;
+
 import java.time.LocalDateTime;
 
 public record ResponseUserDTO(
@@ -9,6 +11,6 @@ public record ResponseUserDTO(
         String cellphone,
         String cpf,
         LocalDateTime registrationDate,
-        store.store_api.model.Addres addres
+        Address address
 ) {
 }

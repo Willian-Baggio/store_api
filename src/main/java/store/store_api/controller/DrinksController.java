@@ -1,22 +1,22 @@
 package store.store_api.controller;
 
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import store.store_api.dto.drinks.AlterDrinksDTO;
 import store.store_api.dto.drinks.DrinksDTO;
 import store.store_api.dto.drinks.ListDrinksDTO;
 import store.store_api.dto.drinks.ResponseDrinksDTO;
-import store.store_api.service.DrinkService;
+import store.store_api.service.DrinksService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("drinks")
+@RequestMapping("/drinks")
+@AllArgsConstructor
 public class DrinksController {
 
-    @Autowired
-    private DrinkService drinkService;
+    private final DrinksService drinkService;
 
     @GetMapping("/{id}")
     public ListDrinksDTO listDrinks(@PathVariable String id) {
@@ -30,21 +30,16 @@ public class DrinksController {
 
     @PostMapping
     public ResponseDrinksDTO drinksRegister(@RequestBody @Valid DrinksDTO drinksDTO) {
-        var dto = drinkService.createDrinks(drinksDTO);
-
-        return new ResponseDrinksDTO(dto.getId(), dto.getDrinkName(), dto.getQuantity(),
-                dto.getPrice(), dto.getDescription());
+        return drinkService.drinksRegister(drinksDTO);
     }
 
     @PutMapping
     public AlterDrinksDTO alterDrink(@RequestBody @Valid AlterDrinksDTO alterDrinksDTO) {
-        var dto = drinkService.alterDrink(alterDrinksDTO);
-        return new AlterDrinksDTO(dto.getId(), dto.getDrinkName(), dto.getQuantity(),
-                dto.getPrice(), dto.getDescription());
+        return drinkService.alterDrink(alterDrinksDTO);
     }
 
     @DeleteMapping("/{id}")
     public void deleteDrink(@PathVariable String id) {
-        drinkService.removeDrink(id);
+        drinkService.deleteDrink(id);
     }
 }
