@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import store.store_api.dto.address.AddressDataDTO;
+import store.store_api.dto.address.AlterAddressDTO;
 
 @Document(collection = "address")
 @Getter
@@ -55,7 +56,7 @@ public class Address {
         this.uf = addressDTO.uf();
     }
 
-    public void update(AddressDataDTO addressDataDTO) {
+    public void update(AlterAddressDTO addressDataDTO) {
         if (addressDataDTO.street() != null) {
             this.street = addressDataDTO.street();
         }

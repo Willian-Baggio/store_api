@@ -1,19 +1,33 @@
 package store.store_api.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 import store.store_api.dto.drinks.AlterDrinksDTO;
 import store.store_api.dto.drinks.DrinksDTO;
 import store.store_api.dto.drinks.ListDrinksDTO;
 import store.store_api.dto.drinks.ResponseDrinksDTO;
 import store.store_api.model.Drinks;
 
-@Mapper
-public interface DrinksMapper {
-    DrinksMapper INSTANCE = Mappers.getMapper(DrinksMapper.class);
+@Component
+@RequiredArgsConstructor
+public class DrinksMapper {
 
-    ListDrinksDTO toListDrinksDTO(Drinks drinks);
-    Drinks toDrinks(DrinksDTO drinksDTO);
-    ResponseDrinksDTO toResponseDrinksDTO(Drinks drinks);
-    AlterDrinksDTO toAlterDrinksDTO(Drinks drinks);
+    private final ModelMapper mapper;
+
+    public ListDrinksDTO toListDrinksDTO(Drinks drinks) {
+        return mapper.map(drinks, ListDrinksDTO.class);
+    }
+
+    public Drinks toDrinks(DrinksDTO drinksDTO) {
+        return mapper.map(drinksDTO, Drinks.class);
+    }
+
+    public ResponseDrinksDTO toResponseDrinksDTO(Drinks drinks) {
+        return mapper.map(drinks, ResponseDrinksDTO.class);
+    }
+
+    public AlterDrinksDTO toAlterDrinksDTO(Drinks drinks) {
+        return mapper.map(drinks, AlterDrinksDTO.class);
+    }
 }

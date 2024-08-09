@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class DrinksService {
 
     private final DrinksRepository drinksRepository;
-    private final DrinksMapper drinksMapper = DrinksMapper.INSTANCE;
+    private final DrinksMapper drinksMapper;
 
     public List<ListDrinksDTO> listAllDrinks() {
         List<Drinks> drinksList = drinksRepository.findAll();
