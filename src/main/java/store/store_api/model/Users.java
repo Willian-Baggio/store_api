@@ -36,7 +36,7 @@ public class Users implements UserDetails {
 
     private Address address;
 
-    public Users(String login, String username, String password, String email, String cellphone, String cpf, Address addres) {
+    public Users(String login, String username, String password, String email, String cellphone, String cpf, Address address) {
         this.login = login;
         this.username = username;
         this.password = password;
@@ -44,7 +44,7 @@ public class Users implements UserDetails {
         this.cellphone = cellphone;
         this.cpf = cpf;
         this.registrationDate = LocalDateTime.now();
-        this.address = addres;
+        this.address = address;
     }
 
     public void update(AlterUserDTO alterUserDTO) {

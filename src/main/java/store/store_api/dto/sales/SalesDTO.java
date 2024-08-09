@@ -1,6 +1,7 @@
 package store.store_api.dto.sales;
 
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
 import store.store_api.model.Sales;
 import store.store_api.model.Stores;
 import store.store_api.model.Users;
@@ -22,6 +23,7 @@ public record SalesDTO(
         BigDecimal totalPrice,
 
         @NotNull
+        @Length(min = 5, max = 225)
         String paymentMethood
 ) {
 }

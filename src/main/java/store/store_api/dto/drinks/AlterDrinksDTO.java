@@ -1,16 +1,21 @@
 package store.store_api.dto.drinks;
 
-import jakarta.validation.constraints.NotNull;
-import store.store_api.model.Drinks;
+import jakarta.validation.constraints.NotBlank;
+import org.hibernate.validator.constraints.Length;
 
 import java.math.BigDecimal;
 
 public record AlterDrinksDTO(
-        @NotNull
+        @NotBlank
         String id,
+
+        @Length(min = 5, max = 225)
         String drinkName,
+
         Integer quantity,
         BigDecimal price,
+
+        @Length(min = 5, max = 225)
         String description
 ) {
 }

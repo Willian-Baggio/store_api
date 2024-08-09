@@ -1,11 +1,13 @@
 package store.store_api.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import store.store_api.dto.productsSold.AlterProductSoldDTO;
 import store.store_api.dto.productsSold.ListProductSoldDTO;
 import store.store_api.dto.productsSold.ProductSoldDTO;
 import store.store_api.dto.productsSold.ResponseProductSoldDTO;
+import store.store_api.exception.CustomValidationException;
 import store.store_api.model.ProductsSold;
 import store.store_api.repository.ProductsSoldRepository;
 
@@ -17,23 +19,21 @@ import java.util.stream.Collectors;
 public class ProductsSoldService {
 
     private final ProductsSoldRepository productsSoldRepository;
-
     private final DrinksService drinksService;
-
     private final FoodsService foodsService;
-
     private final SalesService salesService;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public List<ListProductSoldDTO> listAllProductsSold() {
         List<ProductsSold> productsSoldList = productsSoldRepository.findAll();
         return productsSoldList.stream()
-                .map(ListProductSoldDTO::new)
+                .map(productsSold -> objectMapper.convertValue(productsSold, ListProductSoldDTO.class))
                 .collect(Collectors.toList());
     }
 
     public ListProductSoldDTO listProductSale(String id) {
         var productsSold = findProductSoldById(id);
-        return new ListProductSoldDTO(productsSold);
+        return objectMapper.convertValue(productsSold, ListProductSoldDTO.class);
     }
 
     public ResponseProductSoldDTO productSoldCreate(ProductSoldDTO productSoldDTO) {
@@ -43,8 +43,7 @@ public class ProductsSoldService {
 
         var productsSold = new ProductsSold(foods.getId(), drinks.getId(), sales.getId());
         var saveProductsSold = productsSoldRepository.save(productsSold);
-        return new ResponseProductSoldDTO(saveProductsSold.getId(), saveProductsSold.getFoods(),
-                saveProductsSold.getDrinks(), saveProductsSold.getSales());
+        return objectMapper.convertValue(saveProductsSold, ResponseProductSoldDTO.class);
     }
 
     public AlterProductSoldDTO alterProductSold(AlterProductSoldDTO alterProductSoldDTO) {
@@ -54,9 +53,8 @@ public class ProductsSoldService {
         var sales = salesService.findSalesById(alterProductSoldDTO.salesId());
 
         productsSold.update(alterProductSoldDTO, foods.getId(), drinks.getId(), sales.getId());
-
-        return new AlterProductSoldDTO(productsSold.getId(), productsSold.getFoods(),
-                productsSold.getDrinks(), productsSold.getSales());
+        var saveProductsSold = productsSoldRepository.save(productsSold);
+        return objectMapper.convertValue(saveProductsSold, AlterProductSoldDTO.class);
     }
 
     public void deleteProductSold(String id) {
@@ -66,7 +64,7 @@ public class ProductsSoldService {
 
     public ProductsSold findProductSoldById(String id) {
         return productsSoldRepository.findById(id)
-                .orElseThrow(() -> new jakarta.validation.ValidationException("Product Sold with ID " +
+                .orElseThrow(() -> new CustomValidationException("Product Sold with ID " +
                         id + " does not exist."));
     }
 }

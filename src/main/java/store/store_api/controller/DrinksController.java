@@ -7,6 +7,7 @@ import store.store_api.dto.drinks.AlterDrinksDTO;
 import store.store_api.dto.drinks.DrinksDTO;
 import store.store_api.dto.drinks.ListDrinksDTO;
 import store.store_api.dto.drinks.ResponseDrinksDTO;
+import store.store_api.exception.CustomValidationException;
 import store.store_api.service.DrinksService;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class DrinksController {
     private final DrinksService drinkService;
 
     @GetMapping("/{id}")
-    public ListDrinksDTO listDrinks(@PathVariable String id) {
+    public ListDrinksDTO listDrinks(@PathVariable String id){
         return drinkService.listDrink(id);
     }
 
@@ -34,12 +35,12 @@ public class DrinksController {
     }
 
     @PutMapping
-    public AlterDrinksDTO alterDrink(@RequestBody @Valid AlterDrinksDTO alterDrinksDTO) {
+    public AlterDrinksDTO alterDrink(@RequestBody @Valid AlterDrinksDTO alterDrinksDTO) throws CustomValidationException {
         return drinkService.alterDrink(alterDrinksDTO);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteDrink(@PathVariable String id) {
+    public void deleteDrink(@PathVariable String id){
         drinkService.deleteDrink(id);
     }
 }

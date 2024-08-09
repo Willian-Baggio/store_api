@@ -1,12 +1,12 @@
 package store.store_api.service;
 
-import jakarta.validation.ValidationException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import store.store_api.dto.address.AddressDataDTO;
 import store.store_api.dto.address.ListAddressDTO;
 import store.store_api.dto.address.ResponseAddressDTO;
-import store.store_api.mapper.AddressMapper;
+import store.store_api.exception.CustomValidationException;
 import store.store_api.model.Address;
 import store.store_api.repository.AddressRepository;
 
@@ -18,28 +18,28 @@ import java.util.stream.Collectors;
 public class AddressService {
 
     private final AddressRepository addressRepository;
-    private final AddressMapper addressMapper = AddressMapper.INSTANCE;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public List<ListAddressDTO> listAllAddress() {
         List<Address> addresList = addressRepository.findAll();
         return addresList.stream()
-                .map(addressMapper::toListAddressDTO)
+                .map(address -> objectMapper.convertValue(address,  ListAddressDTO.class))
                 .collect(Collectors.toList());
     }
 
     public ListAddressDTO listAddress(String id) {
         var address = findAddressById(id);
-        return addressMapper.toListAddressDTO(address);
+        return objectMapper.convertValue(address, ListAddressDTO.class);
     }
 
     public ResponseAddressDTO addressRegister(AddressDataDTO addressDataDTO){
         if (addressRepository.existsByZipCode(addressDataDTO.getZipCode())) {
-            throw new ValidationException("CEP already registered");
+            throw new CustomValidationException("CEP already registered");
         }
 
-        var address = addressMapper.toAddressDataDTO(addressDataDTO);
+        var address = objectMapper.convertValue(addressDataDTO, Address.class);
         var saveAddress = addressRepository.save(address);
-        return addressMapper.toResponseAddressDTO(saveAddress);
+        return objectMapper.convertValue(saveAddress, ResponseAddressDTO.class);
     }
 
     public void deleteAddress(String id) {
@@ -49,6 +49,6 @@ public class AddressService {
 
     public Address findAddressById(String id) {
         return addressRepository.findById(id)
-                .orElseThrow(() -> new ValidationException("Address with ID " + id + " does not exist."));
+                .orElseThrow(() -> new CustomValidationException("Address with ID " + id + " does not exist."));
     }
 }

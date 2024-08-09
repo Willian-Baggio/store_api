@@ -1,13 +1,13 @@
 package store.store_api.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import store.store_api.dto.foods.AlterFoodsDTO;
 import store.store_api.dto.foods.FoodsDTO;
 import store.store_api.dto.foods.ListFoodsDTO;
 import store.store_api.dto.foods.ResponseFoodsDTO;
-import store.store_api.exception.ValidationException;
-import store.store_api.mapper.FoodsMapper;
+import store.store_api.exception.CustomValidationException;
 import store.store_api.model.Foods;
 import store.store_api.repository.FoodsRepository;
 
@@ -19,30 +19,31 @@ import java.util.stream.Collectors;
 public class FoodsService {
 
     private final FoodsRepository foodsRepository;
-    private final FoodsMapper foodsMapper = FoodsMapper.INSTANCE;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public List<ListFoodsDTO> listAllFoods() {
         List<Foods> foodsList = foodsRepository.findAll();
         return foodsList.stream()
-                .map(foodsMapper::toListFoodsDTO)
+                .map(foods -> objectMapper.convertValue(foods, ListFoodsDTO.class))
                 .collect(Collectors.toList());
     }
 
     public ListFoodsDTO listFood(String id) {
         var foods = findFoodsById(id);
-        return foodsMapper.toListFoodsDTO(foods);
+        return objectMapper.convertValue(foods, ListFoodsDTO.class);
     }
 
     public ResponseFoodsDTO foodsRegister(FoodsDTO foodsDTO) {
-        var foods = foodsMapper.toFoods(foodsDTO);
+        var foods = objectMapper.convertValue(foodsDTO, Foods.class);
         var saveFoods = foodsRepository.save(foods);
-        return foodsMapper.toResponseFoodsDTO(saveFoods);
+        return objectMapper.convertValue(saveFoods, ResponseFoodsDTO.class);
     }
 
     public AlterFoodsDTO alterFood(AlterFoodsDTO alterFoodsDTO) {
         var foods = findFoodsById(alterFoodsDTO.id());
         foods.update(alterFoodsDTO);
-        return foodsMapper.toAlterFoodsDTO(foods);
+        var saveFoods = foodsRepository.save(foods);
+        return objectMapper.convertValue(saveFoods, AlterFoodsDTO.class);
     }
 
     public void deleteFood(String id) {
@@ -52,7 +53,7 @@ public class FoodsService {
 
     public Foods findFoodsById(String id) {
         return foodsRepository.findById(id)
-                .orElseThrow(() -> new jakarta.validation.ValidationException("Food with ID "
+                .orElseThrow(() -> new CustomValidationException("Food with ID "
                         + id + " does not exist."));
     }
 }
