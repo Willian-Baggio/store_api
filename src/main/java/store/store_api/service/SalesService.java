@@ -8,9 +8,11 @@ import store.store_api.dto.sales.ListSalesDTO;
 import store.store_api.dto.sales.ResponseSaleDTO;
 import store.store_api.dto.sales.SalesDTO;
 import store.store_api.exception.CustomValidationException;
+import store.store_api.model.ProductSoldDetail;
 import store.store_api.model.Sales;
 import store.store_api.repository.SalesRepository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,7 +22,8 @@ public class SalesService {
 
     private final SalesRepository salesRepository;
     private final StoreService storeService;
-    private final UsersService usersService;
+    private final FoodsService foodsService;
+    private final DrinksService drinksService;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public List<ListSalesDTO> listAllSales() {
@@ -37,11 +40,23 @@ public class SalesService {
 
     public ResponseSaleDTO salesRegister(SalesDTO salesDTO) {
         try {
-            var stores = storeService.findStoresById(salesDTO.storeId());
-            var usersDTO = salesDTO.cpf().cpf();
+            var stores = storeService.findStoresById(salesDTO.storesId());
+            var foods = foodsService.findFoodsById(salesDTO.foods().id());
+            var drinks = drinksService.findDrinkById(salesDTO.drinks().id());
 
-            var sales = new Sales(stores.getId(), usersDTO,
-                    salesDTO.quantitySold(), salesDTO.totalPrice(), salesDTO.paymentMethod());
+            BigDecimal totalPrice = BigDecimal.ZERO;
+
+            if (foods != null) {
+                totalPrice = totalPrice.add(foods.getPrice().multiply(BigDecimal.valueOf(salesDTO.foods().quantity())));
+            }
+
+            if (drinks != null) {
+                totalPrice = totalPrice.add(drinks.getPrice().multiply(BigDecimal.valueOf(salesDTO.drinks().quantity())));
+            }
+
+            var sales = new Sales(stores.getId(), salesDTO.cpf(), new ProductSoldDetail(salesDTO.foods().id(), salesDTO.foods().quantity()),
+                    new ProductSoldDetail(salesDTO.drinks().id(), salesDTO.drinks().quantity()),
+                     totalPrice, salesDTO.paymentMethod());
             var saveSales = salesRepository.save(sales);
             return objectMapper.convertValue(saveSales, ResponseSaleDTO.class);
         } catch (CustomValidationException e) {
