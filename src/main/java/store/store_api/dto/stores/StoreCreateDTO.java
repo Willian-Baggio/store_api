@@ -5,8 +5,8 @@ import org.hibernate.validator.constraints.Length;
 import store.store_api.dto.address.AddressDataDTO;
 
 public record StoreCreateDTO(
-        @NotNull
-        @Length(min = 5, max = 225)
+        @Length(min = 5, max = 225,
+                message = "Store name must be between 5 and 225 characters")
         String storeName,
 
         @NotNull

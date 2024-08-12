@@ -2,6 +2,7 @@ package store.store_api.dto.sales;
 
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
+import store.store_api.dto.users.UserCreateDTO;
 import store.store_api.model.Sales;
 import store.store_api.model.Stores;
 import store.store_api.model.Users;
@@ -14,7 +15,7 @@ public record SalesDTO(
         String storeId,
 
         @NotNull
-        String userId,
+        UserCreateDTO cpf,
 
         @NotNull
         Integer quantitySold,
@@ -23,7 +24,8 @@ public record SalesDTO(
         BigDecimal totalPrice,
 
         @NotNull
-        @Length(min = 5, max = 225)
-        String paymentMethood
+        @Length(min = 5, max = 225,
+                message = "Payment method name must be between 5 and 225 characters")
+        String paymentMethod
 ) {
 }

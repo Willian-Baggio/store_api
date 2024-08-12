@@ -35,16 +35,24 @@ public class DrinksService {
     }
 
     public ResponseDrinksDTO drinksRegister(DrinksDTO drinksDTO) {
-        var drinks = objectMapper.convertValue(drinksDTO, Drinks.class);
-        var savedDrinks = drinksRepository.save(drinks);
-        return objectMapper.convertValue(savedDrinks, ResponseDrinksDTO.class);
+        try {
+            var drinks = objectMapper.convertValue(drinksDTO, Drinks.class);
+            var savedDrinks = drinksRepository.save(drinks);
+            return objectMapper.convertValue(savedDrinks, ResponseDrinksDTO.class);
+        } catch (CustomValidationException e) {
+            throw new CustomValidationException(e.getMessage());
+        }
     }
 
     public AlterDrinksDTO alterDrink(AlterDrinksDTO alterDrinksDTO){
-        var drink = findDrinkById(alterDrinksDTO.id());
-        drink.update(alterDrinksDTO);
-        var updatedDrink = drinksRepository.save(drink);
-        return objectMapper.convertValue(updatedDrink, AlterDrinksDTO.class);
+        try {
+            var drink = findDrinkById(alterDrinksDTO.id());
+            drink.update(alterDrinksDTO);
+            var updatedDrink = drinksRepository.save(drink);
+            return objectMapper.convertValue(updatedDrink, AlterDrinksDTO.class);
+        } catch (CustomValidationException e) {
+            throw new CustomValidationException(e.getMessage());
+        }
     }
 
     public void deleteDrink(String id){

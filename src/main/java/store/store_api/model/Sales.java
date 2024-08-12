@@ -19,19 +19,19 @@ public class Sales {
     @Id
     private String id;
     private String stores;
-    private String users;
 
+    private String cpf;
     private LocalDateTime saleDate;
     private Integer quantitySold;
     private BigDecimal totalPrice;
-    private String paymentMethood;
+    private String paymentMethod;
 
-    public Sales(String stores, String users, Integer quantitySold, BigDecimal totalPrice, String paymentMethood) {
+    public Sales(String stores, String cpf, Integer quantitySold, BigDecimal totalPrice, String paymentMethod) {
         this.stores = stores;
-        this.users = users;
+        this.cpf = cpf;
         this.quantitySold = quantitySold;
         this.totalPrice = totalPrice;
-        this.paymentMethood = paymentMethood;
+        this.paymentMethod = paymentMethod;
         this.saleDate = LocalDateTime.now();
     }
 
@@ -48,8 +48,8 @@ public class Sales {
         if (alterSalesDTO.totalPrice() != null) {
             this.totalPrice = alterSalesDTO.totalPrice();
         }
-        if (alterSalesDTO.paymentMethood() != null) {
-            this.paymentMethood = alterSalesDTO.paymentMethood();
+        if (alterSalesDTO.paymentMethod() != null) {
+            this.paymentMethod = alterSalesDTO.paymentMethod();
         }
     }
 }

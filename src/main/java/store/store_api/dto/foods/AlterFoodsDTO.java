@@ -9,13 +9,15 @@ public record AlterFoodsDTO(
         @NotBlank
         String id,
 
-        @Length(min = 5, max = 225)
+        @Length(min = 5, max = 225,
+                message = "Food name must be between 5 and 225 characters")
         String foodName,
 
         Integer quantity,
         BigDecimal price,
 
-        @Length(min = 5, max = 225)
+        @Length(min = 5, max = 225,
+                message = "Food name must be between 5 and 225 characters")
         String description
 ) {
 }

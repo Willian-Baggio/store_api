@@ -2,9 +2,8 @@ package store.store_api.controller;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import store.store_api.dto.address.AlterAddressDTO;
 import store.store_api.dto.stores.AlterStoreDTO;
 import store.store_api.dto.stores.ListStoreDTO;
 import store.store_api.dto.stores.ResponseStoreDTO;
@@ -16,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/store")
 @AllArgsConstructor
+@Validated
 public class StoreController {
 
     private final StoreService storeService;

@@ -10,7 +10,7 @@ public record ResponseSaleDTO(
         LocalDateTime saleDate,
         Integer quantitySold,
         BigDecimal totalPrice,
-        String paymentMethood
+        String paymentMethod
 
 ) {
 }

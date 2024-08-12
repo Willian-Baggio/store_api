@@ -2,6 +2,7 @@ package store.store_api.controller;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import store.store_api.dto.foods.AlterFoodsDTO;
 import store.store_api.dto.foods.FoodsDTO;
@@ -14,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/foods")
 @AllArgsConstructor
+@Validated
 public class FoodsController {
 
     private final FoodsService foodService;

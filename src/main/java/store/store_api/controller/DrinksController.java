@@ -2,6 +2,7 @@ package store.store_api.controller;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import store.store_api.dto.drinks.AlterDrinksDTO;
 import store.store_api.dto.drinks.DrinksDTO;
@@ -15,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/drinks")
 @AllArgsConstructor
+@Validated
 public class DrinksController {
 
     private final DrinksService drinkService;

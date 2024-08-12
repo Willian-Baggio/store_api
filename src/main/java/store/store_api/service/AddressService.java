@@ -33,13 +33,17 @@ public class AddressService {
     }
 
     public ResponseAddressDTO addressRegister(AddressDataDTO addressDataDTO){
-        if (addressRepository.existsByZipCode(addressDataDTO.getZipCode())) {
-            throw new CustomValidationException("CEP already registered");
-        }
+        try {
+            if (addressRepository.existsByZipCode(addressDataDTO.getZipCode())) {
+                throw new CustomValidationException("CEP already registered");
+            }
 
-        var address = objectMapper.convertValue(addressDataDTO, Address.class);
-        var saveAddress = addressRepository.save(address);
-        return objectMapper.convertValue(saveAddress, ResponseAddressDTO.class);
+            var address = objectMapper.convertValue(addressDataDTO, Address.class);
+            var saveAddress = addressRepository.save(address);
+            return objectMapper.convertValue(saveAddress, ResponseAddressDTO.class);
+        } catch (CustomValidationException e) {
+            throw new CustomValidationException(e.getMessage());
+        }
     }
 
     public void deleteAddress(String id) {

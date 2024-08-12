@@ -2,6 +2,7 @@ package store.store_api.controller;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import store.store_api.dto.sales.AlterSalesDTO;
 import store.store_api.dto.sales.ListSalesDTO;
@@ -14,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/sales")
 @AllArgsConstructor
+@Validated
 public class SalesController {
 
     private final SalesService salesService;

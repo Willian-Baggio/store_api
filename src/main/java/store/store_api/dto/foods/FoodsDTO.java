@@ -8,7 +8,8 @@ import java.math.BigDecimal;
 
 public record FoodsDTO(
         @NotBlank
-        @Length(min = 5, max = 225)
+        @Length(min = 5, max = 225,
+                message = "Food name must be between 5 and 225 characters")
         String foodName,
 
         @NotNull
@@ -17,7 +18,8 @@ public record FoodsDTO(
         @NotNull
         BigDecimal price,
 
-        @Length(min = 5, max = 225)
+        @Length(min = 5, max = 225,
+                message = "Food description must be between 5 and 225 characters")
         String description
 ) {
 }

@@ -36,20 +36,28 @@ public class SalesService {
     }
 
     public ResponseSaleDTO salesRegister(SalesDTO salesDTO) {
-        var stores = storeService.findStoresById(salesDTO.storeId());
-        var users = usersService.findUserById(salesDTO.userId());
+        try {
+            var stores = storeService.findStoresById(salesDTO.storeId());
+            var usersDTO = salesDTO.cpf().cpf();
 
-        var sales = new Sales(stores.getId(), users.getId(),
-                salesDTO.quantitySold(), salesDTO.totalPrice(), salesDTO.paymentMethood());
-        var saveSales = salesRepository.save(sales);
-        return objectMapper.convertValue(saveSales, ResponseSaleDTO.class);
+            var sales = new Sales(stores.getId(), usersDTO,
+                    salesDTO.quantitySold(), salesDTO.totalPrice(), salesDTO.paymentMethod());
+            var saveSales = salesRepository.save(sales);
+            return objectMapper.convertValue(saveSales, ResponseSaleDTO.class);
+        } catch (CustomValidationException e) {
+            throw new CustomValidationException(e.getMessage());
+        }
     }
 
     public AlterSalesDTO alterSales(AlterSalesDTO alterSalesDTO) {
-        var sales = findSalesById(alterSalesDTO.id());
-        sales.update(alterSalesDTO);
-        var saveSales = salesRepository.save(sales);
-        return objectMapper.convertValue(saveSales, AlterSalesDTO.class);
+        try {
+            var sales = findSalesById(alterSalesDTO.id());
+            sales.update(alterSalesDTO);
+            var saveSales = salesRepository.save(sales);
+            return objectMapper.convertValue(saveSales, AlterSalesDTO.class);
+        } catch (CustomValidationException e) {
+            throw new CustomValidationException(e.getMessage());
+        }
     }
 
     public void deleteSales(String id) {

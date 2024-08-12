@@ -2,6 +2,7 @@ package store.store_api.controller;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import store.store_api.dto.address.AddressDataDTO;
 import store.store_api.dto.address.ListAddressDTO;
@@ -13,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/address")
 @AllArgsConstructor
+@Validated
 public class AddressController {
 
     private final AddressService addressService;

@@ -13,7 +13,8 @@ public record AlterSalesDTO(
         Integer quantitySold,
         BigDecimal totalPrice,
 
-        @Length(min = 5, max = 225)
-        String paymentMethood
+        @Length(min = 5, max = 225,
+                message = "Payment method name must be between 5 and 225 characters")
+        String paymentMethod
 ) {
 }

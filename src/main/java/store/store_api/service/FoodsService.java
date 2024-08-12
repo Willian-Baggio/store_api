@@ -34,16 +34,24 @@ public class FoodsService {
     }
 
     public ResponseFoodsDTO foodsRegister(FoodsDTO foodsDTO) {
-        var foods = objectMapper.convertValue(foodsDTO, Foods.class);
-        var saveFoods = foodsRepository.save(foods);
-        return objectMapper.convertValue(saveFoods, ResponseFoodsDTO.class);
+        try {
+            var foods = objectMapper.convertValue(foodsDTO, Foods.class);
+            var saveFoods = foodsRepository.save(foods);
+            return objectMapper.convertValue(saveFoods, ResponseFoodsDTO.class);
+        } catch (CustomValidationException e) {
+            throw new CustomValidationException(e.getMessage());
+        }
     }
 
     public AlterFoodsDTO alterFood(AlterFoodsDTO alterFoodsDTO) {
-        var foods = findFoodsById(alterFoodsDTO.id());
-        foods.update(alterFoodsDTO);
-        var saveFoods = foodsRepository.save(foods);
-        return objectMapper.convertValue(saveFoods, AlterFoodsDTO.class);
+        try {
+            var foods = findFoodsById(alterFoodsDTO.id());
+            foods.update(alterFoodsDTO);
+            var saveFoods = foodsRepository.save(foods);
+            return objectMapper.convertValue(saveFoods, AlterFoodsDTO.class);
+        } catch (CustomValidationException e) {
+            throw new CustomValidationException(e.getMessage());
+        }
     }
 
     public void deleteFood(String id) {

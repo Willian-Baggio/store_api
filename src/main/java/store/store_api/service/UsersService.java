@@ -45,22 +45,30 @@ public class UsersService {
     }
 
     public ResponseUserDTO userRegister(UserCreateDTO userCreateDTO) {
-        var addressDTO = userCreateDTO.address();
-        var address = objectMapper.convertValue(addressDTO, Address.class);
-        address = addressRepository.save(address);
+        try {
+            var addressDTO = userCreateDTO.address();
+            var address = objectMapper.convertValue(addressDTO, Address.class);
+            address = addressRepository.save(address);
 
-        var encryptedPassword = bCryptPasswordEncoder.encode(userCreateDTO.password());
-        var users = new Users(userCreateDTO.login(), userCreateDTO.username(), encryptedPassword, userCreateDTO.email(),
-                userCreateDTO.cellphone(), userCreateDTO.cpf(), address);
-        users = usersRepository.save(users);
-        return objectMapper.convertValue(users, ResponseUserDTO.class);
+            var encryptedPassword = bCryptPasswordEncoder.encode(userCreateDTO.password());
+            var users = new Users(userCreateDTO.login(), userCreateDTO.username(), encryptedPassword, userCreateDTO.email(),
+                    userCreateDTO.cellphone(), userCreateDTO.cpf(), address);
+            users = usersRepository.save(users);
+            return objectMapper.convertValue(users, ResponseUserDTO.class);
+        } catch (CustomValidationException e) {
+            throw new CustomValidationException(e.getMessage());
+        }
     }
 
     public AlterUserDTO alterUser(AlterUserDTO alterUserDTO) {
-        var users = findUserById(alterUserDTO.id());
-        users.update(alterUserDTO);
-        var saveUsers = usersRepository.save(users);
-        return objectMapper.convertValue(saveUsers, AlterUserDTO.class);
+        try {
+            var users = findUserById(alterUserDTO.id());
+            users.update(alterUserDTO);
+            var saveUsers = usersRepository.save(users);
+            return objectMapper.convertValue(saveUsers, AlterUserDTO.class);
+        } catch (CustomValidationException e) {
+            throw new CustomValidationException(e.getMessage());
+        }
     }
 
     public void deleteUser(String id) {

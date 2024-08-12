@@ -8,16 +8,20 @@ public record AlterUserDTO(
         @NotBlank
         String id,
 
-        @Length(min = 5, max = 225)
+        @Length(min = 5, max = 225,
+                message = "User name must be between 5 and 225 characters")
         String username,
 
-        @Length(min = 5, max = 225)
+        @Length(min = 5, max = 225,
+                message = "Email must be between 5 and 225 characters")
         String email,
 
-        @Length(min = 5, max = 225)
+        @Length(min = 5, max = 225,
+                message = "Cellphone must be between 5 and 225 characters")
         String cellphone,
 
         String cpf,
+
         AlterAddressDTO address
 ) {
 }

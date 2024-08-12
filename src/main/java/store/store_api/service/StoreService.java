@@ -43,20 +43,28 @@ public class StoreService {
     }
 
     public ResponseStoreDTO createStore(StoreCreateDTO storeCreateDTO) {
-        var addressDTO = storeCreateDTO.address();
-        var address = objectMapper.convertValue(addressDTO, Address.class);
-        address = addressRepository.save(address);
+        try {
+            var addressDTO = storeCreateDTO.address();
+            var address = objectMapper.convertValue(addressDTO, Address.class);
+            address = addressRepository.save(address);
 
-        var stores = new Stores(storeCreateDTO.storeName(), address);
-        var saveStores = storesRepository.save(stores);
-        return objectMapper.convertValue(saveStores, ResponseStoreDTO.class);
+            var stores = new Stores(storeCreateDTO.storeName(), address);
+            var saveStores = storesRepository.save(stores);
+            return objectMapper.convertValue(saveStores, ResponseStoreDTO.class);
+        } catch (CustomValidationException e) {
+            throw new CustomValidationException(e.getMessage());
+        }
     }
 
     public AlterStoreDTO alterStore(AlterStoreDTO alterStoreDTO) {
-        var stores = findStoresById(alterStoreDTO.id());
-        stores.update(alterStoreDTO);
-        var updateStores = storesRepository.save(stores);
-        return objectMapper.convertValue(updateStores, AlterStoreDTO.class);
+        try {
+            var stores = findStoresById(alterStoreDTO.id());
+            stores.update(alterStoreDTO);
+            var updateStores = storesRepository.save(stores);
+            return objectMapper.convertValue(updateStores, AlterStoreDTO.class);
+        } catch (CustomValidationException e) {
+            throw new CustomValidationException(e.getMessage());
+        }
     }
 
     public void deleteStore(String id) {

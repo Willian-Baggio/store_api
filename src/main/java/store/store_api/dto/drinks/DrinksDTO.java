@@ -10,7 +10,8 @@ public record DrinksDTO(
         String id,
 
         @NotBlank
-        @Length(min = 5, max = 225)
+        @Length(min = 5, max = 225,
+                message = "Drink name must be between 5 and 225 characters")
         String drinkName,
 
         @NotNull
@@ -19,7 +20,8 @@ public record DrinksDTO(
         @NotNull
         BigDecimal price,
 
-        @Length(min = 5, max = 225)
+        @Length(min = 5, max = 225,
+                message = "Drink description must be between 5 and 225 characters")
         String description
 ) {
 }

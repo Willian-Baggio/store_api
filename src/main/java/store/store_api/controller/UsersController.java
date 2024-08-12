@@ -2,8 +2,8 @@ package store.store_api.controller;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import store.store_api.dto.address.AlterAddressDTO;
 import store.store_api.dto.users.AlterUserDTO;
 import store.store_api.dto.users.ListUserDTO;
 import store.store_api.dto.users.ResponseUserDTO;
@@ -15,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 @AllArgsConstructor
+@Validated
 public class UsersController {
 
     private final UsersService usersService;
