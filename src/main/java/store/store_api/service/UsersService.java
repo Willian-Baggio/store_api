@@ -14,6 +14,8 @@ import store.store_api.model.Users;
 import store.store_api.repository.AddressRepository;
 import store.store_api.repository.UsersRepository;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,8 +53,8 @@ public class UsersService {
             address = addressRepository.save(address);
 
             var encryptedPassword = bCryptPasswordEncoder.encode(userCreateDTO.password());
-            var users = new Users(userCreateDTO.login(), userCreateDTO.username(), encryptedPassword, userCreateDTO.email(),
-                    userCreateDTO.cellphone(), userCreateDTO.cpf(), address);
+            var users = new Users(null ,userCreateDTO.login(), userCreateDTO.username(), encryptedPassword, userCreateDTO.email(),
+                    userCreateDTO.cellphone(), userCreateDTO.cpf(), LocalDateTime.now(), address);
             users = usersRepository.save(users);
             return objectMapper.convertValue(users, ResponseUserDTO.class);
         } catch (CustomValidationException e) {

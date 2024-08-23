@@ -48,8 +48,7 @@ public class DrinksService {
         try {
             var drink = findDrinkById(alterDrinksDTO.id());
             drink.update(alterDrinksDTO);
-            var updatedDrink = drinksRepository.save(drink);
-            return objectMapper.convertValue(updatedDrink, AlterDrinksDTO.class);
+            return objectMapper.convertValue(drinksRepository.save(drink), AlterDrinksDTO.class);
         } catch (CustomValidationException e) {
             throw new CustomValidationException(e.getMessage());
         }

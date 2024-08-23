@@ -36,17 +36,6 @@ public class Users implements UserDetails {
 
     private Address address;
 
-    public Users(String login, String username, String password, String email, String cellphone, String cpf, Address address) {
-        this.login = login;
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.cellphone = cellphone;
-        this.cpf = cpf;
-        this.registrationDate = LocalDateTime.now();
-        this.address = address;
-    }
-
     public void update(AlterUserDTO alterUserDTO) {
         if (alterUserDTO.username() != null) {
             this.username = alterUserDTO.username();
