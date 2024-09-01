@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class AddressService {
 
     private final AddressRepository addressRepository;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
 
     public List<ListAddressDTO> listAllAddress() {
         List<Address> addresList = addressRepository.findAll();

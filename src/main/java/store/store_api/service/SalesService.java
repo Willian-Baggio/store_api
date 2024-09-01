@@ -13,6 +13,7 @@ import store.store_api.model.Sales;
 import store.store_api.repository.SalesRepository;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,7 +25,7 @@ public class SalesService {
     private final StoreService storeService;
     private final FoodsService foodsService;
     private final DrinksService drinksService;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
 
     public List<ListSalesDTO> listAllSales() {
         List<Sales> salesList = salesRepository.findAll();
@@ -54,7 +55,7 @@ public class SalesService {
                 totalPrice = totalPrice.add(drinks.getPrice().multiply(BigDecimal.valueOf(salesDTO.drinks().quantity())));
             }
 
-            var sales = new Sales(stores.getId(), salesDTO.cpf(), new ProductSoldDetail(salesDTO.foods().id(), salesDTO.foods().quantity()),
+            var sales = new Sales(null, stores.getId(), salesDTO.cpf(), LocalDateTime.now(), new ProductSoldDetail(salesDTO.foods().id(), salesDTO.foods().quantity()),
                     new ProductSoldDetail(salesDTO.drinks().id(), salesDTO.drinks().quantity()),
                      totalPrice, salesDTO.paymentMethod());
             var saveSales = salesRepository.save(sales);

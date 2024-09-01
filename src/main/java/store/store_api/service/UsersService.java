@@ -26,7 +26,7 @@ public class UsersService {
     private final UsersRepository usersRepository;
     private final AddressRepository addressRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
 
     public List<ListUserDTO> listAllUsers() {
         List<Users> usersList = usersRepository.findAll();

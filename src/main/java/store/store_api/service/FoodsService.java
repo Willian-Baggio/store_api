@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class FoodsService {
 
     private final FoodsRepository foodsRepository;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
 
     public List<ListFoodsDTO> listAllFoods() {
         List<Foods> foodsList = foodsRepository.findAll();

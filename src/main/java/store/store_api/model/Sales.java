@@ -1,5 +1,9 @@
 package store.store_api.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import store.store_api.dto.sales.AlterSalesDTO;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Document(collection = "sales")
 @Getter
@@ -20,19 +25,15 @@ public class Sales {
     private String storesId;
 
     private String cpf;
+
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    private LocalDateTime saleDate;
+
     private ProductSoldDetail foods;
     private ProductSoldDetail drinks;
     private BigDecimal totalPrice;
     private String paymentMethod;
-
-    public Sales(String storesId, String cpf, ProductSoldDetail foods, ProductSoldDetail drinks, BigDecimal totalPrice, String paymentMethod) {
-        this.storesId = storesId;
-        this.cpf = cpf;
-        this.foods = foods;
-        this.drinks = drinks;
-        this.totalPrice = totalPrice;
-        this.paymentMethod = paymentMethod;
-    }
 
     public void update(AlterSalesDTO alterSalesDTO) {
         if (alterSalesDTO.paymentMethod() != null) {

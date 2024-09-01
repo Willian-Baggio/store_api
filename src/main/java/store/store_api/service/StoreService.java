@@ -22,7 +22,7 @@ public class StoreService {
 
     private final StoresRepository storesRepository;
     private final AddressRepository addressRepository;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
 
     public ListStoreDTO listStore(String id) {
         var store = findStoresById(id);
